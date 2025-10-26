@@ -14,7 +14,7 @@ export async function postToChannel(
 export async function postDM(userId: string, text: string, blocks?: Blocks) {
 	const { channel } = await app.client.conversations.open({ users: userId });
 
-	if (!channel?.id) throw new Error('Failed to open DM');
+	if (!channel?.id) throw new Error('Failed to open channel');
 
 	return app.client.chat.postMessage({ channel: channel.id, text, blocks });
 }

@@ -3,3 +3,7 @@ export type ParsedVacation = {
 	end: Date;
 	days: number;
 };
+
+export type ParsedVacationWithUser = ParsedVacation & {
+	userId: string;
+};

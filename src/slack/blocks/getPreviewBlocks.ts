@@ -1,9 +1,9 @@
 import type { Block, KnownBlock } from '@slack/types';
 import { formatDate } from '../../utils/formatDate';
-import type { ParsedVacation } from '../../types/vacation';
+import type { ParsedVacationWithUser } from '../../types/vacation';
 
 type GetPreviewBlocks = (
-	args: ParsedVacation & { userId: string },
+	args: ParsedVacationWithUser,
 ) => (KnownBlock | Block)[];
 
 export const getPreviewBlocks: GetPreviewBlocks = ({
