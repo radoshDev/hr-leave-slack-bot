@@ -1,7 +1,8 @@
 export type ParsedVacation = {
-	start: Date;
-	end: Date;
+	startDate: Date;
+	endDate: Date;
 	days: number;
+	year: number;
 };
 
 export type ParsedVacationWithUser = ParsedVacation & {

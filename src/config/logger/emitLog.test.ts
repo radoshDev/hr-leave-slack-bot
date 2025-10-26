@@ -1,8 +1,8 @@
 /** biome-ignore-all lint/suspicious/noConsole: this is Logger tests */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { emitLog } from './emitLog';
 import type { Config } from '../env';
+import type { emitLog } from './emitLog';
 
 const testTimeStamp = '2023-10-01T12:00:00.000Z';
 

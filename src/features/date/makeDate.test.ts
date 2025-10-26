@@ -1,6 +1,6 @@
-import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
-import { format } from 'date-fns';
 import { tz } from '@date-fns/tz';
+import { format } from 'date-fns';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const loadMakeDateWithTZ = async (timezone: string) => {
 	vi.resetModules();

@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
 import { tz } from '@date-fns/tz';
+import { format } from 'date-fns';
 import { config } from '../config/env';
 
 export const formatDate = (d: Date) =>

@@ -8,6 +8,7 @@
 		"build": "tsup src/index.ts --format esm --clean",
 		"start": "node dist/index.js",
 		"lint": "biome check .",
+		"lint:fix": "biome check . --fix",
 		"format": "biome format .",
 		"test": "vitest run",
 		"test:watch": "vitest",

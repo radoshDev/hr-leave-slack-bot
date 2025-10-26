@@ -1,5 +1,5 @@
 // makeYear.test.ts
-import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const testNowYear = 2025;
 const testNowMonth = 9; // September

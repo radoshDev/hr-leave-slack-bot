@@ -1,18 +1,18 @@
-import { describe, expect, it } from "vitest";
-import { isValidTimeZone } from "../../src/utils/timezone";
+import { describe, expect, it } from 'vitest';
+import { isValidTimeZone } from '../../src/utils/timezone';
 
-describe("utils/timezone:isValidTimeZone", () => {
+describe('utils/timezone:isValidTimeZone', () => {
 	const valid = [
-		"Europe/Kyiv",
-		"Europe/Kiev",
-		"europe/Kyiv",
-		"Europe/kyiv",
-		"UTC",
-		"Etc/UTC",
-		"America/New_York",
-		"Asia/Tokyo",
+		'Europe/Kyiv',
+		'Europe/Kiev',
+		'europe/Kyiv',
+		'Europe/kyiv',
+		'UTC',
+		'Etc/UTC',
+		'America/New_York',
+		'Asia/Tokyo',
 	];
-	const invalid = ["Kyiv", "Not/AZone", "", " ", "123", "GMT+2", "UTC+2"];
+	const invalid = ['Kyiv', 'Not/AZone', '', ' ', '123', 'GMT+2', 'UTC+2'];
 
 	valid.forEach((tz) => {
 		it(`returns true for valid IANA zone: ${tz}`, () => {
@@ -26,7 +26,7 @@ describe("utils/timezone:isValidTimeZone", () => {
 		});
 	});
 
-	it("does not throw on unusual inputs", () => {
+	it('does not throw on unusual inputs', () => {
 		const weird: unknown[] = [
 			null,
 			undefined,
@@ -34,8 +34,8 @@ describe("utils/timezone:isValidTimeZone", () => {
 			true,
 			{},
 			[],
-			" Europe/Kyiv ",
-			"UTC ",
+			' Europe/Kyiv ',
+			'UTC ',
 		];
 		weird.forEach((v) => {
 			expect(() => isValidTimeZone(v as string)).not.toThrow();

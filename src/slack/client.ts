@@ -2,8 +2,8 @@ import bolt from '@slack/bolt';
 import { config } from '../config/env';
 import { logger } from '../config/logger';
 import { handleMessage } from './handlers/handleMessage';
-import { handleVacationSend } from './handlers/handleVacationSend';
 import { handleVacationCancel } from './handlers/handleVacationCancel';
+import { handleVacationSend } from './handlers/handleVacationSend';
 
 const { App } = bolt;
 

@@ -1,26 +1,24 @@
-import type { Middleware, SlackEventMiddlewareArgs } from '@slack/bolt';
-import { parseRange } from '../../features/parseRange';
-import { getPreviewBlocks } from '../blocks/getPreviewBlocks';
 import { errorMessages } from '../../constants/errorMessages';
+import { parseRange } from '../../features/parseRange';
+import type { MessageMiddleware } from '../../types/handler';
+import { getPreviewBlocks } from '../blocks/getPreviewBlocks';
 
-type HandleMessage = Middleware<SlackEventMiddlewareArgs<'message'>>;
-
-export const handleMessage: HandleMessage = async ({ event, client, say }) => {
+export const handleMessage: MessageMiddleware = async ({
+	event,
+	client,
+	say,
+}) => {
 	if (event.channel_type !== 'im') return;
 	if (event.subtype) return;
-
-	const userId = event.user;
-	const text = event.text?.trim();
-
-	if (!userId || !text) return;
+	if (!event.text || !event.user) return;
 
 	try {
-		const parsed = parseRange(text);
-		const blocks = getPreviewBlocks({ userId, ...parsed });
+		const parsedRange = parseRange(event.text.trim());
+
 		await client.chat.postMessage({
 			channel: event.channel,
 			text: 'Preview',
-			blocks,
+			blocks: getPreviewBlocks({ userId: event.user, ...parsedRange }),
 		});
 	} catch (e) {
 		const errorMessage =

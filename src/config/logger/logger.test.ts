@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { logger } from './index';
 import { emitLog } from './emitLog';
+import { logger } from './index';
 
 vi.mock('./emitLog', () => ({ emitLog: vi.fn() }));
 

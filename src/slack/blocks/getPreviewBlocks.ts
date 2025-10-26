@@ -1,6 +1,6 @@
 import type { Block, KnownBlock } from '@slack/types';
-import { formatDate } from '../../utils/formatDate';
 import type { ParsedVacationWithUser } from '../../types/vacation';
+import { formatDate } from '../../utils/formatDate';
 
 type GetPreviewBlocks = (
 	args: ParsedVacationWithUser,
@@ -8,9 +8,10 @@ type GetPreviewBlocks = (
 
 export const getPreviewBlocks: GetPreviewBlocks = ({
 	userId,
-	start,
-	end,
+	startDate,
+	endDate,
 	days,
+	year,
 }) => [
 	{ type: 'divider' },
 	{
@@ -29,7 +30,7 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 		type: 'section',
 		text: {
 			type: 'mrkdwn',
-			text: `📅 *Range*: ${formatDate(start)} — ${formatDate(end)}`,
+			text: `📅 *Range*: ${formatDate(startDate)} — ${formatDate(endDate)}`,
 		},
 	},
 	{
@@ -49,8 +50,9 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 				action_id: 'vacation_send',
 				value: JSON.stringify({
 					userId,
-					start: start.toISOString(),
-					end: end.toISOString(),
+					start: startDate.toISOString(),
+					end: endDate.toISOString(),
+					year,
 					days,
 				}),
 			},

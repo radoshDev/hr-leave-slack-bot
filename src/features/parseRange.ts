@@ -1,8 +1,8 @@
 import { differenceInCalendarDays, isPast } from 'date-fns';
 import { errorMessages } from '../constants/errorMessages';
+import type { ParsedVacation } from '../types/vacation';
 import { makeDate } from './date/makeDate';
 import { parseDate } from './date/parseDate';
-import type { ParsedVacation } from '../types/vacation';
 
 const DASH = /[-–—]/;
 
@@ -13,23 +13,24 @@ export const parseRange = (input: string): ParsedVacation => {
 		throw new Error(errorMessages.invalidDate);
 	}
 
-	const startDate = parseDate(inputDates[0]);
-	const endDate = parseDate(inputDates[1]);
+	const startDateObj = parseDate(inputDates[0]);
+	const endDateObj = parseDate(inputDates[1]);
+
+	if (!startDateObj || !endDateObj) throw new Error(errorMessages.invalidDate);
+
+	const startDate = makeDate(startDateObj);
+	const endDate = makeDate(endDateObj);
 
 	if (!startDate || !endDate) throw new Error(errorMessages.invalidDate);
+	if (isPast(startDate) || isPast(endDate))
+		throw new Error(errorMessages.pastDate);
 
-	const start = makeDate(startDate);
-	const end = makeDate(endDate);
-
-	if (!start || !end) throw new Error(errorMessages.invalidDate);
-	if (isPast(start) || isPast(end)) throw new Error(errorMessages.pastDate);
-
-	if (start.getTime() > end.getTime())
+	if (startDate.getTime() > endDate.getTime())
 		throw new Error(errorMessages.invalidRange);
 
-	const days = differenceInCalendarDays(end, start) + 1;
+	const days = differenceInCalendarDays(endDate, startDate) + 1;
 
 	if (days > 21) throw new Error(errorMessages.exceedsMaxDays);
 
-	return { start, end, days };
+	return { startDate: startDate, endDate, days, year: startDate.getFullYear() };
 };

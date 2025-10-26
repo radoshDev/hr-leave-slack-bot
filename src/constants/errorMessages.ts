@@ -6,4 +6,5 @@ export const errorMessages = {
 		'📅 _The requested range exceeds ⚠️ the maximum allowed days._ `(Max 21 days)`‼️',
 	pastDate: '⏳ _The requested dates are in the past_',
 	unableToParse: '🤔 _Unable to parse the provided date range_',
+	systemError: '💥 _A system error occurred. Please try again later._',
 };

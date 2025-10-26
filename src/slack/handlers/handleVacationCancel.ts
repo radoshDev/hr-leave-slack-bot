@@ -1,3 +1,4 @@
+import { logger } from '../../config/logger';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleVacationCancel: ActionMiddleware = async ({
@@ -5,8 +6,12 @@ export const handleVacationCancel: ActionMiddleware = async ({
 	body,
 	client,
 }) => {
-	await ack();
-	if (body.channel?.id && body.message?.ts) {
+	try {
+		if (!body.channel?.id || !body.message?.ts) {
+			throw new Error('Missing channel ID or message timestamp');
+		}
+
+		await ack();
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
@@ -15,5 +20,7 @@ export const handleVacationCancel: ActionMiddleware = async ({
 				{ type: 'section', text: { type: 'mrkdwn', text: '❌ Canceled' } },
 			],
 		});
+	} catch (error) {
+		logger.error('Error in handleVacationCancel:', error);
 	}
 };

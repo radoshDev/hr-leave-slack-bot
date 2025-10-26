@@ -1,8 +1,10 @@
-import { postToChannel } from '../api';
-import { getHrBlocks } from '../blocks/getHrBlocks';
 import { config } from '../../config/env';
+import { logger } from '../../config/logger';
+import { prisma } from '../../db/prisma';
 import type { ActionMiddleware } from '../../types/handler';
 import type { ParsedVacationWithUser } from '../../types/vacation';
+import { postToChannel } from '../api';
+import { getHrBlocks } from '../blocks/getHrBlocks';
 
 export const handleVacationSend: ActionMiddleware = async ({
 	ack,
@@ -10,20 +12,29 @@ export const handleVacationSend: ActionMiddleware = async ({
 	body,
 	client,
 }) => {
-	await ack();
+	try {
+		if (!action?.value || !body.channel?.id || !body.message?.ts) return;
 
-	if (!action?.value) return;
+		await ack();
 
-	const { userId, start, end, days } = JSON.parse(
-		action.value,
-	) as ParsedVacationWithUser;
+		const { userId, startDate, endDate, days, year } = JSON.parse(
+			action.value,
+		) as ParsedVacationWithUser;
 
-	const data = { userId, start: new Date(start), end: new Date(end), days };
+		const data = {
+			userId,
+			startDate: new Date(startDate),
+			endDate: new Date(endDate),
+			days,
+			year,
+		};
 
-	const blocks = getHrBlocks(data);
+		const blocks = getHrBlocks(data);
 
-	await postToChannel(config.hrChannelId, 'Vacation request', blocks);
-	if (body.channel?.id && body.message?.ts) {
+		await prisma.vacation.create({ data });
+
+		await postToChannel(config.hrChannelId, 'Vacation request', blocks);
+
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
@@ -35,5 +46,7 @@ export const handleVacationSend: ActionMiddleware = async ({
 				},
 			],
 		});
+	} catch (error) {
+		logger.error('Error in handleVacationSend:', error);
 	}
 };
