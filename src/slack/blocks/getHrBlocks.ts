@@ -1,16 +1,17 @@
 import type { Block, KnownBlock } from '@slack/types';
-import type { ParsedVacationWithUser } from '../../types/vacation';
+import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { formatDate } from '../../utils/formatDate';
 
-type GetHrBlocks = (args: ParsedVacationWithUser) => (KnownBlock | Block)[];
+type GetHrBlocks = (input: LeaveRequestInput) => (KnownBlock | Block)[];
 
 export const getHrBlocks: GetHrBlocks = ({
 	userId,
 	startDate,
 	endDate,
 	days,
+	type: leaveType,
 }) => [
-	{ type: 'header', text: { type: 'plain_text', text: 'Vacation request' } },
+	{ type: 'header', text: { type: 'plain_text', text: 'Leave request' } },
 	{ type: 'divider' },
 	{
 		type: 'section',
@@ -34,6 +35,13 @@ export const getHrBlocks: GetHrBlocks = ({
 		fields: [
 			{ type: 'mrkdwn', text: '⏳ *Days*' },
 			{ type: 'mrkdwn', text: `${days}` },
+		],
+	},
+	{
+		type: 'section',
+		fields: [
+			{ type: 'mrkdwn', text: '⏳ *Leave Type*' },
+			{ type: 'mrkdwn', text: `${leaveType}` },
 		],
 	},
 	{ type: 'divider' },

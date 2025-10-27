@@ -1,12 +1,14 @@
 import { differenceInCalendarDays, isPast } from 'date-fns';
 import { errorMessages } from '../constants/errorMessages';
-import type { ParsedVacation } from '../types/vacation';
+import type { LeaveRequestInput } from '../types/leaveRequest';
 import { makeDate } from './date/makeDate';
 import { parseDate } from './date/parseDate';
 
 const DASH = /[-–—]/;
 
-export const parseRange = (input: string): ParsedVacation => {
+type ParseRange = (input: string) => Omit<LeaveRequestInput, 'userId' | 'type'>;
+
+export const parseRange: ParseRange = (input) => {
 	const inputDates = input.split(DASH);
 
 	if (inputDates.length > 2 || !inputDates[0] || !inputDates[1]) {

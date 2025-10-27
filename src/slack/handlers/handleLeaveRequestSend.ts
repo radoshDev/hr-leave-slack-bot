@@ -1,8 +1,8 @@
 import { config } from '../../config/env';
 import { logger } from '../../config/logger';
-import { prisma } from '../../db/prisma';
+import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import type { ActionMiddleware } from '../../types/handler';
-import type { ParsedVacationWithUser } from '../../types/vacation';
+import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { postToChannel } from '../api';
 import { getHrBlocks } from '../blocks/getHrBlocks';
 
@@ -17,9 +17,9 @@ export const handleVacationSend: ActionMiddleware = async ({
 
 		await ack();
 
-		const { userId, startDate, endDate, days, year } = JSON.parse(
+		const { userId, startDate, endDate, days, year, type } = JSON.parse(
 			action.value,
-		) as ParsedVacationWithUser;
+		) as LeaveRequestInput;
 
 		const data = {
 			userId,
@@ -27,11 +27,12 @@ export const handleVacationSend: ActionMiddleware = async ({
 			endDate: new Date(endDate),
 			days,
 			year,
+			type,
 		};
 
 		const blocks = getHrBlocks(data);
 
-		await prisma.vacation.create({ data });
+		await saveLeaveRequest(data);
 
 		await postToChannel(config.hrChannelId, 'Vacation request', blocks);
 

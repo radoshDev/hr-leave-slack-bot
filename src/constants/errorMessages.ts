@@ -7,4 +7,6 @@ export const errorMessages = {
 	pastDate: '⏳ _The requested dates are in the past_',
 	unableToParse: '🤔 _Unable to parse the provided date range_',
 	systemError: '💥 _A system error occurred. Please try again later._',
+	overlappingLeaveRequest:
+		'🛑 _You already have a leave request during this period._',
 };

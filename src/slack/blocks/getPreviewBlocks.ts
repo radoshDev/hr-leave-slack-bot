@@ -1,9 +1,11 @@
 import type { Block, KnownBlock } from '@slack/types';
-import type { ParsedVacationWithUser } from '../../types/vacation';
+import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { formatDate } from '../../utils/formatDate';
+import { LeaveType } from '@prisma/client';
+import { EVENT_KEYS } from '../../constants/eventKeys';
 
 type GetPreviewBlocks = (
-	args: ParsedVacationWithUser,
+	args: Omit<LeaveRequestInput, 'type'>,
 ) => (KnownBlock | Block)[];
 
 export const getPreviewBlocks: GetPreviewBlocks = ({
@@ -47,13 +49,14 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 				type: 'button',
 				text: { type: 'plain_text', text: 'Send' },
 				style: 'primary',
-				action_id: 'vacation_send',
+				action_id: EVENT_KEYS.LEAVE_REQUEST_SEND,
 				value: JSON.stringify({
 					userId,
 					start: startDate.toISOString(),
 					end: endDate.toISOString(),
 					year,
 					days,
+					type: LeaveType.VACATION,
 				}),
 			},
 			{
