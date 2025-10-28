@@ -1,6 +1,7 @@
 import type { Block, KnownBlock } from '@slack/types';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { formatDate } from '../../utils/formatDate';
+import { EVENT_KEYS } from '../../constants/eventKeys';
 
 type GetHrBlocks = (input: LeaveRequestInput) => (KnownBlock | Block)[];
 
@@ -26,7 +27,7 @@ export const getHrBlocks: GetHrBlocks = ({
 			{ type: 'mrkdwn', text: '📅 *Range*' },
 			{
 				type: 'mrkdwn',
-				text: `${formatDate(startDate)} — ${formatDate(endDate)}`,
+				text: `${formatDate(new Date(startDate), 'dd.MM.yyyy')} — ${formatDate(new Date(endDate), 'dd.MM.yyyy')}`,
 			},
 		],
 	},

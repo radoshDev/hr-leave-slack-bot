@@ -3,6 +3,7 @@ import { errorMessages } from '../constants/errorMessages';
 import type { LeaveRequestInput } from '../types/leaveRequest';
 import { makeDate } from './date/makeDate';
 import { parseDate } from './date/parseDate';
+import { formatDate } from '../utils/formatDate';
 
 const DASH = /[-–—]/;
 
@@ -34,5 +35,10 @@ export const parseRange: ParseRange = (input) => {
 
 	if (days > 21) throw new Error(errorMessages.exceedsMaxDays);
 
-	return { startDate: startDate, endDate, days, year: startDate.getFullYear() };
+	return {
+		startDate: `${formatDate(startDate, 'yyyy-MM-dd')}T00:00:00Z`,
+		endDate: `${formatDate(endDate, 'yyyy-MM-dd')}T00:00:00Z`,
+		days,
+		year: startDate.getFullYear(),
+	};
 };

@@ -1,10 +1,10 @@
 import { TZDate } from '@date-fns/tz';
-import { startOfDay } from 'date-fns';
 import { config } from '../../config/env';
 import type { DateObject } from '../../types/date';
 
 export const makeDate = ({ year, month, day }: DateObject): Date | null => {
 	const tzDate = new TZDate(year, month - 1, day, config.timezone);
+
 	if (
 		tzDate.getFullYear() !== year ||
 		tzDate.getMonth() + 1 !== month ||
@@ -12,5 +12,5 @@ export const makeDate = ({ year, month, day }: DateObject): Date | null => {
 	) {
 		return null;
 	}
-	return startOfDay(tzDate);
+	return tzDate;
 };

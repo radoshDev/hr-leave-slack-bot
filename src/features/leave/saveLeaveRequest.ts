@@ -1,10 +1,12 @@
 import { Status } from '@prisma/client';
-import { errorMessages } from '../../constants/errorMessages';
 import { prisma } from '../../db/prisma';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 
 export async function saveLeaveRequest(input: LeaveRequestInput) {
-	const { userId, startDate, endDate, days, year, type } = input;
+	const { userId, days, year, type } = input;
+
+	const startDate = new Date(input.startDate);
+	const endDate = new Date(input.endDate);
 
 	const overlapping = await prisma.leaveRequest.findFirst({
 		where: {
@@ -19,9 +21,7 @@ export async function saveLeaveRequest(input: LeaveRequestInput) {
 		},
 	});
 
-	if (overlapping) {
-		throw new Error(errorMessages.overlappingLeaveRequest);
-	}
+	if (overlapping) return false;
 
 	return prisma.leaveRequest.create({
 		data: {

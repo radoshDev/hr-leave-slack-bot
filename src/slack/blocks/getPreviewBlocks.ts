@@ -1,8 +1,8 @@
 import type { Block, KnownBlock } from '@slack/types';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
-import { formatDate } from '../../utils/formatDate';
 import { LeaveType } from '@prisma/client';
 import { EVENT_KEYS } from '../../constants/eventKeys';
+import { formatDate } from '../../utils/formatDate';
 
 type GetPreviewBlocks = (
 	args: Omit<LeaveRequestInput, 'type'>,
@@ -32,7 +32,7 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 		type: 'section',
 		text: {
 			type: 'mrkdwn',
-			text: `📅 *Range*: ${formatDate(startDate)} — ${formatDate(endDate)}`,
+			text: `📅 *Range*: ${formatDate(new Date(startDate), 'dd.MM.yyyy')} — ${formatDate(new Date(endDate), 'dd.MM.yyyy')}`,
 		},
 	},
 	{
@@ -52,18 +52,18 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 				action_id: EVENT_KEYS.LEAVE_REQUEST_SEND,
 				value: JSON.stringify({
 					userId,
-					start: startDate.toISOString(),
-					end: endDate.toISOString(),
+					startDate,
+					endDate,
 					year,
 					days,
-					type: LeaveType.VACATION,
-				}),
+					type: LeaveType.VACATION, //TODO: make dynamic when other types are added
+				} as LeaveRequestInput),
 			},
 			{
 				type: 'button',
 				text: { type: 'plain_text', text: 'Cancel' },
 				style: 'danger',
-				action_id: 'vacation_cancel',
+				action_id: EVENT_KEYS.LEAVE_REQUEST_CANCEL,
 				value: JSON.stringify({ userId }),
 			},
 		],

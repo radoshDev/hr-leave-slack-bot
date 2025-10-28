@@ -1,5 +1,6 @@
 import { config } from '../../config/env';
 import { logger } from '../../config/logger';
+import { errorMessages } from '../../constants/errorMessages';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
@@ -23,18 +24,38 @@ export const handleVacationSend: ActionMiddleware = async ({
 
 		const data = {
 			userId,
-			startDate: new Date(startDate),
-			endDate: new Date(endDate),
+			startDate,
+			endDate,
 			days,
 			year,
 			type,
 		};
 
-		const blocks = getHrBlocks(data);
+		const result = await saveLeaveRequest(data);
 
-		await saveLeaveRequest(data);
+		if (result === false) {
+			await client.chat.update({
+				channel: body.channel.id,
+				ts: body.message.ts,
+				text: 'Error',
+				blocks: [
+					{
+						type: 'section',
+						text: {
+							type: 'mrkdwn',
+							text: errorMessages.overlappingLeaveRequest,
+						},
+					},
+				],
+			});
+			return;
+		}
 
-		await postToChannel(config.hrChannelId, 'Vacation request', blocks);
+		await postToChannel(
+			config.hrChannelId,
+			'Vacation request',
+			getHrBlocks(data),
+		);
 
 		await client.chat.update({
 			channel: body.channel.id,
