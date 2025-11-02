@@ -1,7 +1,7 @@
 import { errorMessages } from '../../constants/errorMessages';
 import { parseRange } from '../../features/parseRange';
-import type { MessageMiddleware } from '../../types/handler';
 import { getPreviewBlocks } from '../blocks/getPreviewBlocks';
+import type { MessageMiddleware } from '../../types/handler';
 
 export const handleMessage: MessageMiddleware = async ({
 	event,

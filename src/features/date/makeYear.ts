@@ -1,8 +1,8 @@
 import { TZDate } from '@date-fns/tz';
 import { startOfDay } from 'date-fns';
 import { config } from '../../config/env';
-import type { DateObject } from '../../types/date';
 import { makeDate } from './makeDate';
+import type { DateObject } from '../../types/date';
 
 export function makeYear({
 	day,

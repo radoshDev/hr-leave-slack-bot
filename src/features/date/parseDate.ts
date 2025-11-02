@@ -1,5 +1,5 @@
-import type { DateObject } from '../../types/date';
 import { makeYear } from './makeYear';
+import type { DateObject } from '../../types/date';
 
 const DATE_RE = /^\s*(\d{1,2})\.(\d{1,2})(?:\.(\d{4}))?\s*$/;
 

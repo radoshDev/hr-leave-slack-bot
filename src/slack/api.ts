@@ -1,5 +1,5 @@
-import type { Block, KnownBlock } from '@slack/types';
 import { app } from './client';
+import type { Block, KnownBlock } from '@slack/types';
 
 type Blocks = (KnownBlock | Block)[] | undefined;
 

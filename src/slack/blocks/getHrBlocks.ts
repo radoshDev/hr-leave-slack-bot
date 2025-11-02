@@ -1,7 +1,7 @@
-import type { Block, KnownBlock } from '@slack/types';
 import { EVENT_KEYS } from '../../constants/eventKeys';
-import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { formatDate } from '../../utils/formatDate';
+import type { Block, KnownBlock } from '@slack/types';
+import type { LeaveRequestInput } from '../../types/leaveRequest';
 
 type GetHrBlocks = (
 	input: LeaveRequestInput,

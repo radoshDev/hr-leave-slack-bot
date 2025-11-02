@@ -1,9 +1,9 @@
 import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { prisma } from '../../db/prisma';
-import type { ActionMiddleware } from '../../types/handler';
 import { formatDate } from '../../utils/formatDate';
 import { postDM } from '../api';
+import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveApprove: ActionMiddleware = async ({
 	ack,
