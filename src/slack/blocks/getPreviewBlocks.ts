@@ -1,7 +1,7 @@
-import type { Block, KnownBlock } from '@slack/types';
-import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { LeaveType } from '@prisma/client';
+import type { Block, KnownBlock } from '@slack/types';
 import { EVENT_KEYS } from '../../constants/eventKeys';
+import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { formatDate } from '../../utils/formatDate';
 
 type GetPreviewBlocks = (

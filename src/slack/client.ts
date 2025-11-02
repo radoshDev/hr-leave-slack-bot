@@ -1,10 +1,12 @@
 import bolt from '@slack/bolt';
 import { config } from '../config/env';
 import { logger } from '../config/logger';
-import { handleMessage } from './handlers/handleMessage';
-import { handleVacationCancel } from './handlers/handleLeaveRequestCancel';
-import { handleVacationSend } from './handlers/handleLeaveRequestSend';
 import { EVENT_KEYS } from '../constants/eventKeys';
+import { handleLeaveApprove } from './handlers/handleLeaveApprove';
+import { handleLeaveReject } from './handlers/handleLeaveReject';
+import { handleLeaveRequestCancel } from './handlers/handleLeaveRequestCancel';
+import { handleLeaveRequestSend } from './handlers/handleLeaveRequestSend';
+import { handleMessage } from './handlers/handleMessage';
 
 const { App } = bolt;
 
@@ -17,8 +19,11 @@ export const app = new App({
 export async function start() {
 	app.event('message', handleMessage);
 
-	app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleVacationSend);
-	app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleVacationCancel);
+	app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleLeaveRequestSend);
+	app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleLeaveRequestCancel);
+
+	app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleLeaveApprove);
+	app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleLeaveReject);
 
 	await app.start();
 

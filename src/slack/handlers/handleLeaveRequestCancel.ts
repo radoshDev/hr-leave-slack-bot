@@ -1,7 +1,7 @@
 import { logger } from '../../config/logger';
 import type { ActionMiddleware } from '../../types/handler';
 
-export const handleVacationCancel: ActionMiddleware = async ({
+export const handleLeaveRequestCancel: ActionMiddleware = async ({
 	ack,
 	body,
 	client,

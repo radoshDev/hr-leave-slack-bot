@@ -1,9 +1,9 @@
 import { differenceInCalendarDays, isPast } from 'date-fns';
 import { errorMessages } from '../constants/errorMessages';
 import type { LeaveRequestInput } from '../types/leaveRequest';
+import { formatDate } from '../utils/formatDate';
 import { makeDate } from './date/makeDate';
 import { parseDate } from './date/parseDate';
-import { formatDate } from '../utils/formatDate';
 
 const DASH = /[-–—]/;
 

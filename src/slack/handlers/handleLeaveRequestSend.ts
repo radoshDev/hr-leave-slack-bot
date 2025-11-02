@@ -7,7 +7,7 @@ import type { LeaveRequestInput } from '../../types/leaveRequest';
 import { postToChannel } from '../api';
 import { getHrBlocks } from '../blocks/getHrBlocks';
 
-export const handleVacationSend: ActionMiddleware = async ({
+export const handleLeaveRequestSend: ActionMiddleware = async ({
 	ack,
 	action,
 	body,
@@ -54,7 +54,7 @@ export const handleVacationSend: ActionMiddleware = async ({
 		await postToChannel(
 			config.hrChannelId,
 			'Vacation request',
-			getHrBlocks(data),
+			getHrBlocks(data, result.id),
 		);
 
 		await client.chat.update({
