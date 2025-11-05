@@ -1,20 +1,31 @@
 import { app } from './client';
-import type { Block, KnownBlock } from '@slack/types';
+import { config } from '../config/env';
+import type { Blocks } from '../types/handler';
+import { getHrBlocks } from './blocks/getHrBlocks';
+import type { LeaveRequest } from '@prisma/client';
 
-type Blocks = (KnownBlock | Block)[] | undefined;
+type PostToChannelArgs = {
+	requestData: LeaveRequest;
+};
 
-export async function postToChannel(
-	channel: string,
-	text: string,
-	blocks?: Blocks,
-) {
-	return app.client.chat.postMessage({ channel, text, blocks });
-}
+type PostDMArgs = {
+	userId: string;
+	text: string;
+	blocks?: Blocks;
+};
 
-export async function postDM(userId: string, text: string, blocks?: Blocks) {
-	const { channel } = await app.client.conversations.open({ users: userId });
+export const api = {
+	postToHrChannel: async ({ requestData }: PostToChannelArgs) => {
+		return app.client.chat.postMessage({
+			channel: config.hrChannelId,
+			blocks: getHrBlocks({ requestData }),
+		});
+	},
+	postDM: async ({ userId, text, blocks }: PostDMArgs) => {
+		const { channel } = await app.client.conversations.open({ users: userId });
 
-	if (!channel?.id) throw new Error('Failed to open channel');
+		if (!channel?.id) throw new Error('Failed to open DM channel');
 
-	return app.client.chat.postMessage({ channel: channel.id, text, blocks });
-}
+		return app.client.chat.postMessage({ channel: channel.id, text, blocks });
+	},
+};

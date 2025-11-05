@@ -1,8 +1,9 @@
 import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { prisma } from '../../db/prisma';
-import { formatDate } from '../../utils/formatDate';
-import { postDM } from '../api';
+import { api } from '../api';
+import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
+import { getLeaveDecisionMessage } from '../messages/getLeaveDecisionMessage';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveApprove: ActionMiddleware = async ({
@@ -18,38 +19,28 @@ export const handleLeaveApprove: ActionMiddleware = async ({
 		const hrUserId = body.user.id;
 
 		const requestId = Number(action.value);
-		const request = await prisma.leaveRequest.update({
+		const requestData = await prisma.leaveRequest.update({
 			where: { id: requestId },
 			data: { status: Status.APPROVED },
 		});
 
-		const msg = [
-			`✅ *Approved by* <@${hrUserId}>`,
-			`👤 *Employee:* <@${request.userId}>`,
-			`📅 *Period:* ${formatDate(request.startDate, 'dd.MM.yyyy')} — ${formatDate(request.endDate, 'dd.MM.yyyy')} (${request.days} days)`,
-			`🗓 *Type:* ${request.type.replace('_', ' ').toLowerCase()}`,
-		].join('\n');
-
-		await postDM(
-			request.userId,
-			`✅ Your leave request (${formatDate(
-				request.startDate,
-				'dd.MM.yyyy',
-			)} – ${formatDate(
-				request.endDate,
-				'dd.MM.yyyy',
-			)}) has been *approved* by <@${hrUserId}>`,
-		);
+		await api.postDM({
+			userId: requestData.userId,
+			text: getLeaveDecisionMessage({
+				requestData,
+				hrUserId,
+				status: Status.APPROVED,
+			}),
+		});
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
 			text: 'Approved',
-			blocks: [
-				{
-					type: 'section',
-					text: { type: 'mrkdwn', text: msg },
-				},
-			],
+			blocks: getLeaveDecisionBlocks({
+				hrUserId,
+				requestData,
+				status: Status.APPROVED,
+			}),
 		});
 	} catch (error) {
 		logger.error('Error in handleLeaveApprove', error);

@@ -1,11 +1,10 @@
-import { config } from '../../config/env';
 import { logger } from '../../config/logger';
 import { errorMessages } from '../../constants/errorMessages';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
-import { postToChannel } from '../api';
-import { getHrBlocks } from '../blocks/getHrBlocks';
+import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
+import { responseMessages } from '../../constants/responseMessages';
 
 export const handleLeaveRequestSend: ActionMiddleware = async ({
 	ack,
@@ -22,7 +21,7 @@ export const handleLeaveRequestSend: ActionMiddleware = async ({
 			action.value,
 		) as LeaveRequestInput;
 
-		const data = {
+		const requestData = {
 			userId,
 			startDate,
 			endDate,
@@ -31,42 +30,25 @@ export const handleLeaveRequestSend: ActionMiddleware = async ({
 			type,
 		};
 
-		const result = await saveLeaveRequest(data);
+		const requestResult = await saveLeaveRequest(requestData);
 
-		if (result === false) {
+		if (requestResult === false) {
 			await client.chat.update({
 				channel: body.channel.id,
 				ts: body.message.ts,
-				text: 'Error',
-				blocks: [
-					{
-						type: 'section',
-						text: {
-							type: 'mrkdwn',
-							text: errorMessages.overlappingLeaveRequest,
-						},
-					},
-				],
+				text: errorMessages.overlappingLeaveRequest,
 			});
 			return;
 		}
 
-		await postToChannel(
-			config.hrChannelId,
-			'Vacation request',
-			getHrBlocks(data, result.id),
-		);
+		await api.postToHrChannel({
+			requestData: requestResult,
+		});
 
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			text: 'Sent',
-			blocks: [
-				{
-					type: 'section',
-					text: { type: 'mrkdwn', text: '✅ Sent to HR' },
-				},
-			],
+			text: responseMessages.sentToHr,
 		});
 	} catch (error) {
 		logger.error('Error in handleVacationSend:', error);

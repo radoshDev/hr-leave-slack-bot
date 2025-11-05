@@ -1,4 +1,5 @@
 import { logger } from '../../config/logger';
+import { responseMessages } from '../../constants/responseMessages';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveRequestCancel: ActionMiddleware = async ({
@@ -15,10 +16,7 @@ export const handleLeaveRequestCancel: ActionMiddleware = async ({
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			text: 'Canceled',
-			blocks: [
-				{ type: 'section', text: { type: 'mrkdwn', text: '❌ Canceled' } },
-			],
+			text: responseMessages.canceled,
 		});
 	} catch (error) {
 		logger.error('Error in handleVacationCancel:', error);

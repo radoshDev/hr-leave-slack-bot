@@ -1,3 +1,6 @@
+import type { Block, KnownBlock } from '@slack/types';
+import type { LeaveRequest, Status } from '@prisma/client';
+
 import type {
 	BlockButtonAction,
 	Middleware,
@@ -10,3 +13,13 @@ export type ActionMiddleware = Middleware<
 >;
 
 export type MessageMiddleware = Middleware<SlackEventMiddlewareArgs<'message'>>;
+
+export type Blocks = (KnownBlock | Block)[];
+
+export type LeaveDecisionStatus = Exclude<Status, 'PENDING'>;
+
+export type LeaveDecision = {
+	hrUserId: string;
+	requestData: LeaveRequest;
+	status: LeaveDecisionStatus;
+};

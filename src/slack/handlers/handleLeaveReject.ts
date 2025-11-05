@@ -1,9 +1,10 @@
 import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { prisma } from '../../db/prisma';
-import { formatDate } from '../../utils/formatDate';
-import { postDM } from '../api';
+import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
+import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
+import { getLeaveDecisionMessage } from '../messages/getLeaveDecisionMessage';
 
 export const handleLeaveReject: ActionMiddleware = async ({
 	ack,
@@ -19,33 +20,29 @@ export const handleLeaveReject: ActionMiddleware = async ({
 		const requestId = Number(action.value);
 		const hrUserId = body.user.id;
 
-		const request = await prisma.leaveRequest.update({
+		const requestData = await prisma.leaveRequest.update({
 			where: { id: requestId },
-			data: { status: Status.CANCELED },
+			data: { status: Status.REJECTED },
 		});
 
-		await postDM(
-			request.userId,
-			`❌ Your leave request (${formatDate(request.startDate, 'dd.MM.yyyy')} – ${formatDate(request.endDate, 'dd.MM.yyyy')}) has been *rejected* by <@${hrUserId}>.`,
-		);
-
-		const msg = [
-			`❌ *Rejected by* <@${hrUserId}>`,
-			`👤 *Employee:* <@${request.userId}>`,
-			`📅 *Period:* ${formatDate(request.startDate, 'dd.MM.yyyy')} — ${formatDate(request.endDate, 'dd.MM.yyyy')} (${request.days} days)`,
-			`🗓 *Type:* ${request.type.replace('_', ' ').toLowerCase()}`,
-		].join('\n');
+		await api.postDM({
+			userId: requestData.userId,
+			text: getLeaveDecisionMessage({
+				requestData,
+				hrUserId,
+				status: Status.REJECTED,
+			}),
+		});
 
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			text: 'Approved',
-			blocks: [
-				{
-					type: 'section',
-					text: { type: 'mrkdwn', text: msg },
-				},
-			],
+			text: 'Rejected',
+			blocks: getLeaveDecisionBlocks({
+				hrUserId,
+				requestData,
+				status: Status.REJECTED,
+			}),
 		});
 	} catch (error) {
 		logger.error('Error in handleLeaveReject', error);

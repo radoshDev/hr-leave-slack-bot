@@ -30,5 +30,5 @@ enum LeaveType {
 enum Status {
   APPROVED
   PENDING
-  CANCELED
+  REJECTED
 }

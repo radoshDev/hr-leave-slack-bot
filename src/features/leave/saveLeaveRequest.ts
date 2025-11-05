@@ -1,8 +1,12 @@
-import { Status } from '@prisma/client';
+import { Status, type LeaveRequest } from '@prisma/client';
 import { prisma } from '../../db/prisma';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 
-export async function saveLeaveRequest(input: LeaveRequestInput) {
+type SaveLeaveRequest = (
+	input: LeaveRequestInput,
+) => Promise<false | LeaveRequest>;
+
+export const saveLeaveRequest: SaveLeaveRequest = async (input) => {
 	const { userId, days, year, type } = input;
 
 	const startDate = new Date(input.startDate);
@@ -34,4 +38,4 @@ export async function saveLeaveRequest(input: LeaveRequestInput) {
 			status: Status.PENDING,
 		},
 	});
-}
+};
