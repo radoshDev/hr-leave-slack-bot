@@ -15,7 +15,6 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 	days,
 	year,
 }) => [
-	{ type: 'divider' },
 	{
 		type: 'header',
 		text: { type: 'plain_text', text: 'Vacation request (preview)' },

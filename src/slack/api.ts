@@ -1,8 +1,8 @@
-import { app } from './client';
 import { config } from '../config/env';
-import type { Blocks } from '../types/handler';
 import { getHrBlocks } from './blocks/getHrBlocks';
+import { app } from './client';
 import type { LeaveRequest } from '@prisma/client';
+import type { Blocks } from '../types/handler';
 
 type PostToChannelArgs = {
 	requestData: LeaveRequest;

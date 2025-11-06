@@ -1,6 +1,6 @@
+import { STATUS_CONFIG } from '../../constants/responseMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { LeaveDecision } from '../../types/handler';
-import { STATUS_CONFIG } from '../../constants/responseMessages';
 
 export const getLeaveDecisionMessage = ({
 	requestData,

@@ -1,3 +1,4 @@
+import { leaveTypes } from '../../constants/leaveTypes';
 import { STATUS_CONFIG } from '../../constants/responseMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { Blocks, LeaveDecision } from '../../types/handler';
@@ -8,7 +9,7 @@ const getLeaveDecisionBlocks = ({
 	status,
 }: LeaveDecision): Blocks => {
 	const { emoji, resultLabel } = STATUS_CONFIG[status];
-	const { userId, endDate, startDate, days, type: requestType } = requestData;
+	const { userId, endDate, startDate, days, type: leaveType } = requestData;
 
 	return [
 		{
@@ -19,7 +20,7 @@ const getLeaveDecisionBlocks = ({
 					`${emoji} ${resultLabel} by <@${hrUserId}>`,
 					`👤 *Employee:* <@${userId}>`,
 					`📅 *Period:* ${formatDate(startDate, 'dd.MM.yyyy')} — ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days)`,
-					`🗓 *Type:* ${requestType.replace('_', ' ').toLowerCase()}`,
+					`🗓 *Type:* ${leaveTypes[leaveType]}`,
 				].join('\n'),
 			},
 		},

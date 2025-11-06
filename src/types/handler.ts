@@ -1,12 +1,11 @@
-import type { Block, KnownBlock } from '@slack/types';
 import type { LeaveRequest, Status } from '@prisma/client';
-
 import type {
 	BlockButtonAction,
 	Middleware,
 	SlackActionMiddlewareArgs,
 	SlackEventMiddlewareArgs,
 } from '@slack/bolt';
+import type { Block, KnownBlock } from '@slack/types';
 
 export type ActionMiddleware = Middleware<
 	SlackActionMiddlewareArgs<BlockButtonAction>

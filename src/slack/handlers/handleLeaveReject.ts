@@ -2,9 +2,9 @@ import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { prisma } from '../../db/prisma';
 import { api } from '../api';
-import type { ActionMiddleware } from '../../types/handler';
 import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
 import { getLeaveDecisionMessage } from '../messages/getLeaveDecisionMessage';
+import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveReject: ActionMiddleware = async ({
 	ack,
@@ -37,7 +37,6 @@ export const handleLeaveReject: ActionMiddleware = async ({
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			text: 'Rejected',
 			blocks: getLeaveDecisionBlocks({
 				hrUserId,
 				requestData,

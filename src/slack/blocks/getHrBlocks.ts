@@ -1,8 +1,8 @@
 import { EVENT_KEYS } from '../../constants/eventKeys';
+import { leaveTypes } from '../../constants/leaveTypes';
 import { formatDate } from '../../utils/formatDate';
 import type { LeaveRequest } from '@prisma/client';
 import type { Blocks } from '../../types/handler';
-import { leaveTypes } from '../../constants/leaveTypes';
 
 type GetHrBlocks = ({ requestData }: { requestData: LeaveRequest }) => Blocks;
 

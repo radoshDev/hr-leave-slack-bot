@@ -1,4 +1,4 @@
-import { Status, type LeaveRequest } from '@prisma/client';
+import { type LeaveRequest, Status } from '@prisma/client';
 import { prisma } from '../../db/prisma';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 

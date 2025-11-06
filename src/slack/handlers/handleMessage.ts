@@ -17,7 +17,6 @@ export const handleMessage: MessageMiddleware = async ({
 
 		await client.chat.postMessage({
 			channel: event.channel,
-			text: 'Preview',
 			blocks: getPreviewBlocks({ userId: event.user, ...parsedRange }),
 		});
 	} catch (e) {
