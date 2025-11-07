@@ -5,6 +5,7 @@ import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
+import { LeaveType } from '@prisma/client';
 
 export const handleLeaveRequestSend: ActionMiddleware = async ({
 	ack,
@@ -27,7 +28,7 @@ export const handleLeaveRequestSend: ActionMiddleware = async ({
 			endDate,
 			days,
 			year,
-			type,
+			type: type || LeaveType.VACATION,
 		};
 
 		const requestResult = await saveLeaveRequest(requestData);

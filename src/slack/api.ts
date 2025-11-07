@@ -18,6 +18,7 @@ export const api = {
 	postToHrChannel: async ({ requestData }: PostToChannelArgs) => {
 		return app.client.chat.postMessage({
 			channel: config.hrChannelId,
+			text: 'New leave request submitted',
 			blocks: getHrBlocks({ requestData }),
 		});
 	},

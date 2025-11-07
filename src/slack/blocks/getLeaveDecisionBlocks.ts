@@ -1,4 +1,4 @@
-import { leaveTypes } from '../../constants/leaveTypes';
+import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { STATUS_CONFIG } from '../../constants/responseMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { Blocks, LeaveDecision } from '../../types/handler';
@@ -20,7 +20,7 @@ const getLeaveDecisionBlocks = ({
 					`${emoji} ${resultLabel} by <@${hrUserId}>`,
 					`👤 *Employee:* <@${userId}>`,
 					`📅 *Period:* ${formatDate(startDate, 'dd.MM.yyyy')} — ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days)`,
-					`🗓 *Type:* ${leaveTypes[leaveType]}`,
+					`🗓 *Type:* ${leaveTypesText[leaveType]}`,
 				].join('\n'),
 			},
 		},

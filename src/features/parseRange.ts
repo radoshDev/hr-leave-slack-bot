@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, isPast } from 'date-fns';
+import { differenceInCalendarDays, isBefore, startOfToday } from 'date-fns';
 import { errorMessages } from '../constants/errorMessages';
 import { formatDate } from '../utils/formatDate';
 import { makeDate } from './date/makeDate';
@@ -25,7 +25,9 @@ export const parseRange: ParseRange = (input) => {
 	const endDate = makeDate(endDateObj);
 
 	if (!startDate || !endDate) throw new Error(errorMessages.invalidDate);
-	if (isPast(startDate) || isPast(endDate))
+
+	const today = startOfToday();
+	if (isBefore(startDate, today) || isBefore(endDate, today))
 		throw new Error(errorMessages.pastDate);
 
 	if (startDate.getTime() > endDate.getTime())

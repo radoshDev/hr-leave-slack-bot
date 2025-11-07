@@ -1,5 +1,5 @@
 import { EVENT_KEYS } from '../../constants/eventKeys';
-import { leaveTypes } from '../../constants/leaveTypes';
+import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { LeaveRequest } from '@prisma/client';
 import type { Blocks } from '../../types/handler';
@@ -46,7 +46,7 @@ export const getHrBlocks: GetHrBlocks = ({ requestData }) => {
 			type: 'section',
 			fields: [
 				{ type: 'mrkdwn', text: '🗓 *Leave Type*' },
-				{ type: 'mrkdwn', text: `${leaveTypes[leaveType]}` },
+				{ type: 'mrkdwn', text: `${leaveTypesText[leaveType]}` },
 			],
 		},
 		{ type: 'divider' },

@@ -1,8 +1,9 @@
-import { LeaveType } from '@prisma/client';
 import { EVENT_KEYS } from '../../constants/eventKeys';
 import { formatDate } from '../../utils/formatDate';
 import type { Block, KnownBlock } from '@slack/types';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
+import { leaveTypesText } from '../../constants/leaveTypeMessages';
+import { LeaveType } from '@prisma/client';
 
 type GetPreviewBlocks = (
 	args: Omit<LeaveRequestInput, 'type'>,
@@ -42,6 +43,33 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 		},
 	},
 	{
+		type: 'section',
+		text: { type: 'mrkdwn', text: '*Select leave type:*' },
+		accessory: {
+			type: 'static_select',
+			action_id: EVENT_KEYS.SELECT_LEAVE_TYPE,
+			placeholder: {
+				type: 'plain_text',
+				text: leaveTypesText.VACATION,
+			},
+			options: [
+				{
+					text: { type: 'plain_text', text: leaveTypesText.VACATION },
+					value: LeaveType.VACATION,
+				},
+				{
+					text: { type: 'plain_text', text: leaveTypesText.SICK_LEAVE },
+					value: LeaveType.SICK_LEAVE,
+				},
+				{
+					text: { type: 'plain_text', text: leaveTypesText.UNPAID },
+					value: LeaveType.UNPAID,
+				},
+			],
+		},
+	},
+	{ type: 'divider' },
+	{
 		type: 'actions',
 		elements: [
 			{
@@ -55,8 +83,7 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 					endDate,
 					year,
 					days,
-					type: LeaveType.VACATION, //TODO: make dynamic when other types are added
-				} as LeaveRequestInput),
+				} satisfies Omit<LeaveRequestInput, 'type'>),
 			},
 			{
 				type: 'button',

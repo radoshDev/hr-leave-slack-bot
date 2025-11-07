@@ -1,6 +1,7 @@
 import type { LeaveRequest, Status } from '@prisma/client';
 import type {
 	BlockButtonAction,
+	BlockStaticSelectAction,
 	Middleware,
 	SlackActionMiddlewareArgs,
 	SlackEventMiddlewareArgs,
@@ -9,6 +10,10 @@ import type { Block, KnownBlock } from '@slack/types';
 
 export type ActionMiddleware = Middleware<
 	SlackActionMiddlewareArgs<BlockButtonAction>
+>;
+
+export type SelectMiddleware = Middleware<
+	SlackActionMiddlewareArgs<BlockStaticSelectAction>
 >;
 
 export type MessageMiddleware = Middleware<SlackEventMiddlewareArgs<'message'>>;

@@ -7,6 +7,7 @@ import { handleLeaveReject } from './handlers/handleLeaveReject';
 import { handleLeaveRequestCancel } from './handlers/handleLeaveRequestCancel';
 import { handleLeaveRequestSend } from './handlers/handleLeaveRequestSend';
 import { handleMessage } from './handlers/handleMessage';
+import { handleSelectLeaveType } from './handlers/handleSelectLeaveType';
 
 const { App } = bolt;
 
@@ -24,6 +25,8 @@ export async function start() {
 
 	app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleLeaveApprove);
 	app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleLeaveReject);
+
+	app.action(EVENT_KEYS.SELECT_LEAVE_TYPE, handleSelectLeaveType);
 
 	await app.start();
 
