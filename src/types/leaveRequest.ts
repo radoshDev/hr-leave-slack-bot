@@ -1,4 +1,4 @@
-import type { LeaveType } from '@prisma/client';
+import type { LeaveType, Status } from '@prisma/client';
 
 export type LeaveRequestInput = {
 	userId: string;
@@ -8,3 +8,5 @@ export type LeaveRequestInput = {
 	year: number;
 	type: LeaveType;
 };
+
+export type LeaveTypeWithStatus = LeaveType | Status;

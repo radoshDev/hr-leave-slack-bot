@@ -1,5 +1,5 @@
+import { EMOJI } from '../../constants/emoji';
 import { leaveTypesText } from '../../constants/leaveTypeMessages';
-import { STATUS_CONFIG } from '../../constants/responseMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { Blocks, LeaveDecision } from '../../types/handler';
 
@@ -8,7 +8,6 @@ const getLeaveDecisionBlocks = ({
 	requestData,
 	status,
 }: LeaveDecision): Blocks => {
-	const { emoji, resultLabel } = STATUS_CONFIG[status];
 	const { userId, endDate, startDate, days, type: leaveType } = requestData;
 
 	return [
@@ -17,10 +16,10 @@ const getLeaveDecisionBlocks = ({
 			text: {
 				type: 'mrkdwn',
 				text: [
-					`${emoji} ${resultLabel} by <@${hrUserId}>`,
-					`👤 *Employee:* <@${userId}>`,
-					`📅 *Period:* ${formatDate(startDate, 'dd.MM.yyyy')} — ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days)`,
-					`🗓 *Type:* ${leaveTypesText[leaveType]}`,
+					`${EMOJI[status]} ${leaveTypesText[status]} by <@${hrUserId}>`,
+					`${EMOJI.employee} *Employee:* <@${userId}>`,
+					`${EMOJI.period} *Period:* ${formatDate(startDate, 'dd.MM.yyyy')} — ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days)`,
+					`${EMOJI.type} *Type:* ${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
 				].join('\n'),
 			},
 		},

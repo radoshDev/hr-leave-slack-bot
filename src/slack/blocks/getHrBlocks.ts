@@ -1,3 +1,4 @@
+import { EMOJI } from '../../constants/emoji';
 import { EVENT_KEYS } from '../../constants/eventKeys';
 import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
@@ -21,14 +22,14 @@ export const getHrBlocks: GetHrBlocks = ({ requestData }) => {
 		{
 			type: 'section',
 			fields: [
-				{ type: 'mrkdwn', text: '👤 *Employee*' },
+				{ type: 'mrkdwn', text: `${EMOJI.employee} *Employee*` },
 				{ type: 'mrkdwn', text: `<@${userId}>` },
 			],
 		},
 		{
 			type: 'section',
 			fields: [
-				{ type: 'mrkdwn', text: '📅 *Range*' },
+				{ type: 'mrkdwn', text: `${EMOJI.period} *Period*` },
 				{
 					type: 'mrkdwn',
 					text: `${formatDate(new Date(startDate), 'dd.MM.yyyy')} — ${formatDate(new Date(endDate), 'dd.MM.yyyy')}`,
@@ -38,15 +39,18 @@ export const getHrBlocks: GetHrBlocks = ({ requestData }) => {
 		{
 			type: 'section',
 			fields: [
-				{ type: 'mrkdwn', text: '⏳ *Days*' },
+				{ type: 'mrkdwn', text: `${EMOJI.days} *Days*` },
 				{ type: 'mrkdwn', text: `${days}` },
 			],
 		},
 		{
 			type: 'section',
 			fields: [
-				{ type: 'mrkdwn', text: '🗓 *Leave Type*' },
-				{ type: 'mrkdwn', text: `${leaveTypesText[leaveType]}` },
+				{ type: 'mrkdwn', text: `${EMOJI.type} *Leave Type*` },
+				{
+					type: 'mrkdwn',
+					text: `${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
+				},
 			],
 		},
 		{ type: 'divider' },

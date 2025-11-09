@@ -1,9 +1,10 @@
+import { LeaveType } from '@prisma/client';
+import { EMOJI } from '../../constants/emoji';
 import { EVENT_KEYS } from '../../constants/eventKeys';
+import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { Block, KnownBlock } from '@slack/types';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
-import { leaveTypesText } from '../../constants/leaveTypeMessages';
-import { LeaveType } from '@prisma/client';
 
 type GetPreviewBlocks = (
 	args: Omit<LeaveRequestInput, 'type'>,
@@ -18,28 +19,28 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 }) => [
 	{
 		type: 'header',
-		text: { type: 'plain_text', text: 'Vacation request (preview)' },
+		text: { type: 'plain_text', text: 'Leave request (preview)' },
 	},
 	{ type: 'divider' },
 	{
 		type: 'section',
 		text: {
 			type: 'mrkdwn',
-			text: `👤 *Employee*: <@${userId}>`,
+			text: `${EMOJI.employee} *Employee*: <@${userId}>`,
 		},
 	},
 	{
 		type: 'section',
 		text: {
 			type: 'mrkdwn',
-			text: `📅 *Range*: ${formatDate(new Date(startDate), 'dd.MM.yyyy')} — ${formatDate(new Date(endDate), 'dd.MM.yyyy')}`,
+			text: `${EMOJI.period} *Period*: ${formatDate(new Date(startDate), 'dd.MM.yyyy')} — ${formatDate(new Date(endDate), 'dd.MM.yyyy')}`,
 		},
 	},
 	{
 		type: 'section',
 		text: {
 			type: 'mrkdwn',
-			text: `⏳ *Days*: ${days}`,
+			text: `${EMOJI.days} *Days*: ${days}`,
 		},
 	},
 	{
@@ -50,22 +51,17 @@ export const getPreviewBlocks: GetPreviewBlocks = ({
 			action_id: EVENT_KEYS.SELECT_LEAVE_TYPE,
 			placeholder: {
 				type: 'plain_text',
-				text: leaveTypesText.VACATION,
+				text: `${EMOJI.VACATION} ${leaveTypesText.VACATION}`,
 			},
-			options: [
-				{
-					text: { type: 'plain_text', text: leaveTypesText.VACATION },
-					value: LeaveType.VACATION,
-				},
-				{
-					text: { type: 'plain_text', text: leaveTypesText.SICK_LEAVE },
-					value: LeaveType.SICK_LEAVE,
-				},
-				{
-					text: { type: 'plain_text', text: leaveTypesText.UNPAID },
-					value: LeaveType.UNPAID,
-				},
-			],
+			options: [LeaveType.VACATION, LeaveType.SICK_LEAVE, LeaveType.UNPAID].map(
+				(leaveType) => ({
+					text: {
+						type: 'plain_text',
+						text: `${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
+					},
+					value: LeaveType[leaveType],
+				}),
+			),
 		},
 	},
 	{ type: 'divider' },

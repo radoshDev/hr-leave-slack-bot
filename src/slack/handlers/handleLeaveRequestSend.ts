@@ -1,11 +1,12 @@
+import { LeaveType } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { errorMessages } from '../../constants/errorMessages';
 import { responseMessages } from '../../constants/responseMessages';
+import { getBookedLeaveDaysForYear } from '../../features/leave/getBookedLeaveDaysForYear';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
-import { LeaveType } from '@prisma/client';
 
 export const handleLeaveRequestSend: ActionMiddleware = async ({
 	ack,
@@ -46,10 +47,21 @@ export const handleLeaveRequestSend: ActionMiddleware = async ({
 			requestData: requestResult,
 		});
 
+		const bookedDays = await getBookedLeaveDaysForYear({
+			userId,
+			year,
+			leaveType: requestData.type,
+		});
+
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			text: responseMessages.sentToHr,
+			text: responseMessages.sentToHr({
+				type: requestResult.type,
+				startDate: requestResult.startDate,
+				endDate: requestResult.endDate,
+				bookedDays,
+			}),
 		});
 	} catch (error) {
 		logger.error('Error in handleVacationSend:', error);

@@ -1,9 +1,9 @@
 import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
+import { responseMessages } from '../../constants/responseMessages';
 import { prisma } from '../../db/prisma';
 import { api } from '../api';
 import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
-import { getLeaveDecisionMessage } from '../messages/getLeaveDecisionMessage';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveReject: ActionMiddleware = async ({
@@ -27,7 +27,7 @@ export const handleLeaveReject: ActionMiddleware = async ({
 
 		await api.postDM({
 			userId: requestData.userId,
-			text: getLeaveDecisionMessage({
+			text: responseMessages.decision({
 				requestData,
 				hrUserId,
 				status: Status.REJECTED,

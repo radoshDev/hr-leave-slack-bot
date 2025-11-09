@@ -1,0 +1,7 @@
+import type { LeaveType } from '@prisma/client';
+
+export const LEAVE_LIMITS: Record<LeaveType, number> = {
+	VACATION: 21,
+	SICK_LEAVE: 10,
+	UNPAID: Infinity,
+} as const;
