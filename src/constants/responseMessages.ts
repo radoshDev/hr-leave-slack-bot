@@ -1,11 +1,14 @@
+import { LEAVE_LIMITS } from '../config/leavePolicy';
 import { formatDate } from '../utils/formatDate';
 import { EMOJI } from './emoji';
 import { leaveTypesText } from './leaveTypeMessages';
 import type { LeaveRequest } from '@prisma/client';
 import type { LeaveDecision } from '../types/handler';
-import { LEAVE_LIMITS } from '../config/leavePolicy';
 
-type SentToHrPrams = Pick<LeaveRequest, 'type' | 'startDate' | 'endDate'> & {
+type SentToHrPrams = Pick<
+	LeaveRequest,
+	'type' | 'startDate' | 'endDate' | 'days'
+> & {
 	bookedDays: number;
 };
 
@@ -14,14 +17,15 @@ export const responseMessages = {
 		type,
 		startDate,
 		endDate,
+		days,
 		bookedDays,
 	}: SentToHrPrams): string => {
-		return `${EMOJI.APPROVED} Your ${leaveTypesText[type].toLowerCase()} request from ${formatDate(startDate, 'dd.MM.yyyy')} to ${formatDate(endDate, 'dd.MM.yyyy')} has been sent to HR for approval.\n You have ${bookedDays} ${leaveTypesText[type].toLowerCase()} of ${LEAVE_LIMITS[type]} days booked this year.`;
+		return `${EMOJI.APPROVED} Your ${leaveTypesText[type].toLowerCase()} request from ${formatDate(startDate, 'dd.MM.yyyy')} to ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days) has been sent to HR for approval.\n Used: *${bookedDays}* / *${LEAVE_LIMITS[type]}* days this year.`;
 	},
 	canceled: `${EMOJI.REJECTED} Canceled`,
 	decision: ({ requestData, hrUserId, status }: LeaveDecision): string => {
-		const { startDate, endDate, type } = requestData;
+		const { startDate, endDate, type, days } = requestData;
 
-		return `${EMOJI[type]} Your leave request (${formatDate(startDate, 'dd.MM.yyyy')} – ${formatDate(endDate, 'dd.MM.yyyy')}) has been *${leaveTypesText[status]}* by <@${hrUserId}>.`;
+		return `${EMOJI.PENDING} Your ${EMOJI[type]} ${leaveTypesText[type]} request (${formatDate(startDate, 'dd.MM.yyyy')} – ${formatDate(endDate, 'dd.MM.yyyy')}, ${days} days) has been *${leaveTypesText[status].toLowerCase()}* by <@${hrUserId}>.`;
 	},
 };

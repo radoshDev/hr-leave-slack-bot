@@ -60,6 +60,7 @@ export const handleLeaveRequestSend: ActionMiddleware = async ({
 				type: requestResult.type,
 				startDate: requestResult.startDate,
 				endDate: requestResult.endDate,
+				days: requestResult.days,
 				bookedDays,
 			}),
 		});

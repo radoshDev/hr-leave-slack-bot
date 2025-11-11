@@ -2,6 +2,8 @@ import bolt from '@slack/bolt';
 import { config } from '../config/env';
 import { logger } from '../config/logger';
 import { EVENT_KEYS } from '../constants/eventKeys';
+import { handleInfoCommand } from './handlers/handleInfoCommand';
+import { handleInfoEmployeeLeaveRequest } from './handlers/handleInfoEmployeeLeaveRequest';
 import { handleLeaveApprove } from './handlers/handleLeaveApprove';
 import { handleLeaveReject } from './handlers/handleLeaveReject';
 import { handleLeaveRequestCancel } from './handlers/handleLeaveRequestCancel';
@@ -18,17 +20,30 @@ export const app = new App({
 });
 
 export async function start() {
-	app.event('message', handleMessage);
+	try {
+		app.event('message', handleMessage);
 
-	app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleLeaveRequestSend);
-	app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleLeaveRequestCancel);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleLeaveRequestSend);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleLeaveRequestCancel);
 
-	app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleLeaveApprove);
-	app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleLeaveReject);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleLeaveApprove);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleLeaveReject);
 
-	app.action(EVENT_KEYS.SELECT_LEAVE_TYPE, handleSelectLeaveType);
+		app.action(EVENT_KEYS.SELECT_LEAVE_TYPE, handleSelectLeaveType);
 
-	await app.start();
+		app.command('/info', handleInfoCommand);
 
-	logger.info('Slack socket started');
+		app.action(
+			EVENT_KEYS.INFO_EMPLOYEE_VACATION,
+			handleInfoEmployeeLeaveRequest,
+		);
+		app.action(EVENT_KEYS.INFO_EMPLOYEE_SICK, handleInfoEmployeeLeaveRequest);
+		app.action(EVENT_KEYS.INFO_EMPLOYEE_UNPAID, handleInfoEmployeeLeaveRequest);
+
+		await app.start();
+
+		logger.info('Slack socket started');
+	} catch (error) {
+		logger.error('Error starting Slack app', { error });
+	}
 }

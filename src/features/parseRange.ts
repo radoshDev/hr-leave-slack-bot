@@ -35,8 +35,6 @@ export const parseRange: ParseRange = (input) => {
 
 	const days = differenceInCalendarDays(endDate, startDate) + 1;
 
-	if (days > 21) throw new Error(errorMessages.exceedsMaxDays);
-
 	return {
 		startDate: `${formatDate(startDate, 'yyyy-MM-dd')}T00:00:00Z`,
 		endDate: `${formatDate(endDate, 'yyyy-MM-dd')}T00:00:00Z`,

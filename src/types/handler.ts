@@ -4,6 +4,7 @@ import type {
 	BlockStaticSelectAction,
 	Middleware,
 	SlackActionMiddlewareArgs,
+	SlackCommandMiddlewareArgs,
 	SlackEventMiddlewareArgs,
 } from '@slack/bolt';
 import type { Block, KnownBlock } from '@slack/types';
@@ -15,6 +16,8 @@ export type ActionMiddleware = Middleware<
 export type SelectMiddleware = Middleware<
 	SlackActionMiddlewareArgs<BlockStaticSelectAction>
 >;
+
+export type CommandMiddleware = Middleware<SlackCommandMiddlewareArgs>;
 
 export type MessageMiddleware = Middleware<SlackEventMiddlewareArgs<'message'>>;
 

@@ -16,10 +16,10 @@ const getLeaveDecisionBlocks = ({
 			text: {
 				type: 'mrkdwn',
 				text: [
-					`${EMOJI[status]} ${leaveTypesText[status]} by <@${hrUserId}>`,
+					`${EMOJI.type} *Type:* ${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
 					`${EMOJI.employee} *Employee:* <@${userId}>`,
 					`${EMOJI.period} *Period:* ${formatDate(startDate, 'dd.MM.yyyy')} — ${formatDate(endDate, 'dd.MM.yyyy')} (${days} days)`,
-					`${EMOJI.type} *Type:* ${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
+					`${EMOJI[status]} ${leaveTypesText[status]} by <@${hrUserId}>`,
 				].join('\n'),
 			},
 		},
