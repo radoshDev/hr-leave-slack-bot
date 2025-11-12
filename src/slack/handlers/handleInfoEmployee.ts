@@ -7,7 +7,7 @@ import { prisma } from '../../db/prisma';
 import { formatDate } from '../../utils/formatDate';
 import type { ActionMiddleware } from '../../types/handler';
 
-export const handleInfoEmployeeLeaveRequest: ActionMiddleware = async ({
+export const handleInfoEmployee: ActionMiddleware = async ({
 	ack,
 	body,
 	client,

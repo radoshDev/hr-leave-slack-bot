@@ -2,7 +2,7 @@ import { logger } from '../../config/logger';
 import { responseMessages } from '../../constants/responseMessages';
 import type { ActionMiddleware } from '../../types/handler';
 
-export const handleLeaveRequestCancel: ActionMiddleware = async ({
+export const handleEmployeeLeaveCancel: ActionMiddleware = async ({
 	ack,
 	body,
 	client,

@@ -6,7 +6,7 @@ import { api } from '../api';
 import { HRRequestDecisionBlocks } from '../blocks/HRRequestDecisionBlocks';
 import type { ActionMiddleware } from '../../types/handler';
 
-export const handleLeaveReject: ActionMiddleware = async ({
+export const handleHRLeaveApprove: ActionMiddleware = async ({
 	ack,
 	action,
 	body,
@@ -16,13 +16,12 @@ export const handleLeaveReject: ActionMiddleware = async ({
 		await ack();
 
 		if (!action.value || !body.channel?.id || !body.message?.ts) return;
-
-		const requestId = Number(action.value);
 		const hrUserId = body.user.id;
 
+		const requestId = Number(action.value);
 		const requestData = await prisma.leaveRequest.update({
 			where: { id: requestId },
-			data: { status: Status.REJECTED },
+			data: { status: Status.APPROVED },
 		});
 
 		await api.postDM({
@@ -30,20 +29,20 @@ export const handleLeaveReject: ActionMiddleware = async ({
 			text: responseMessages.decision({
 				requestData,
 				hrUserId,
-				status: Status.REJECTED,
+				status: Status.APPROVED,
 			}),
 		});
-
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
+			text: 'Approved',
 			blocks: HRRequestDecisionBlocks({
 				hrUserId,
 				requestData,
-				status: Status.REJECTED,
+				status: Status.APPROVED,
 			}),
 		});
 	} catch (error) {
-		logger.error('Error in handleLeaveReject', error);
+		logger.error('Error in handleLeaveApprove', error);
 	}
 };

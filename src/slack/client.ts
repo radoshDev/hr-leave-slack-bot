@@ -3,13 +3,13 @@ import { config } from '../config/env';
 import { logger } from '../config/logger';
 import { EVENT_KEYS } from '../constants/eventKeys';
 import { handleInfoCommand } from './handlers/handleInfoCommand';
-import { handleInfoEmployeeLeaveRequest } from './handlers/handleInfoEmployeeLeaveRequest';
-import { handleLeaveApprove } from './handlers/handleLeaveApprove';
-import { handleLeaveReject } from './handlers/handleLeaveReject';
-import { handleLeaveRequestCancel } from './handlers/handleLeaveRequestCancel';
-import { handleLeaveRequestSend } from './handlers/handleLeaveRequestSend';
-import { handleMessage } from './handlers/handleMessage';
-import { handleSelectLeaveType } from './handlers/handleSelectLeaveType';
+import { handleInfoEmployee } from './handlers/handleInfoEmployee';
+import { handleHRLeaveApprove } from './handlers/handleHRLeaveApprove';
+import { handleHRLeaveReject } from './handlers/handleHRLeaveReject';
+import { handleEmployeeLeaveCancel } from './handlers/handleEmployeeLeaveCancel';
+import { handleEmployeeLeaveSend } from './handlers/handleEmployeeLeaveSend';
+import { handleEmployeeMessage } from './handlers/handleEmployeeMessage';
+import { handleEmployeeSelectLeaveType } from './handlers/handleEmployeeSelectLeaveType';
 
 const { App } = bolt;
 
@@ -21,24 +21,23 @@ export const app = new App({
 
 export async function start() {
 	try {
-		app.event('message', handleMessage);
+		app.event('message', handleEmployeeMessage);
 
-		app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleLeaveRequestSend);
-		app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleLeaveRequestCancel);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_SEND, handleEmployeeLeaveSend);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_CANCEL, handleEmployeeLeaveCancel);
 
-		app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleLeaveApprove);
-		app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleLeaveReject);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_APPROVE, handleHRLeaveApprove);
+		app.action(EVENT_KEYS.LEAVE_REQUEST_REJECT, handleHRLeaveReject);
 
-		app.action(EVENT_KEYS.SELECT_LEAVE_TYPE, handleSelectLeaveType);
+		app.action(EVENT_KEYS.SELECT_LEAVE_TYPE, handleEmployeeSelectLeaveType);
 
 		app.command('/info', handleInfoCommand);
 
-		app.action(
-			EVENT_KEYS.INFO_EMPLOYEE_VACATION,
-			handleInfoEmployeeLeaveRequest,
-		);
-		app.action(EVENT_KEYS.INFO_EMPLOYEE_SICK, handleInfoEmployeeLeaveRequest);
-		app.action(EVENT_KEYS.INFO_EMPLOYEE_UNPAID, handleInfoEmployeeLeaveRequest);
+		app.action(EVENT_KEYS.INFO_EMPLOYEE_VACATION, handleInfoEmployee);
+		app.action(EVENT_KEYS.INFO_EMPLOYEE_SICK, handleInfoEmployee);
+		app.action(EVENT_KEYS.INFO_EMPLOYEE_UNPAID, handleInfoEmployee);
+
+		app.action(EVENT_KEYS.INFO_HR_SELECT_LEAVE_TYPE);
 
 		await app.start();
 

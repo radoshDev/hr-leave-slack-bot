@@ -8,7 +8,7 @@ import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 
-export const handleLeaveRequestSend: ActionMiddleware = async ({
+export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 	ack,
 	action,
 	body,

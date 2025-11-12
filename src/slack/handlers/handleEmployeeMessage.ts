@@ -3,7 +3,7 @@ import { parseRange } from '../../features/parseRange';
 import { employeeRequestPreviewBlocks } from '../blocks/employeeRequestPreviewBlocks';
 import type { MessageMiddleware } from '../../types/handler';
 
-export const handleMessage: MessageMiddleware = async ({
+export const handleEmployeeMessage: MessageMiddleware = async ({
 	event,
 	client,
 	say,

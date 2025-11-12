@@ -3,7 +3,7 @@ import { EVENT_KEYS } from '../../constants/eventKeys';
 import type { Button, KnownBlock } from '@slack/types';
 import type { SelectMiddleware } from '../../types/handler';
 
-export const handleSelectLeaveType: SelectMiddleware = async ({
+export const handleEmployeeSelectLeaveType: SelectMiddleware = async ({
 	ack,
 	body,
 	action,
