@@ -1,5 +1,5 @@
 import { config } from '../config/env';
-import { getHrBlocks } from './blocks/getHrBlocks';
+import { HRPreviewBlocks } from './blocks/HRPreviewBlocks';
 import { app } from './client';
 import type { LeaveRequest } from '@prisma/client';
 import type { Blocks } from '../types/handler';
@@ -19,7 +19,7 @@ export const api = {
 		return app.client.chat.postMessage({
 			channel: config.hrChannelId,
 			text: 'New leave request submitted',
-			blocks: getHrBlocks({ requestData }),
+			blocks: HRPreviewBlocks({ requestData }),
 		});
 	},
 	postDM: async ({ userId, text, blocks }: PostDMArgs) => {

@@ -4,7 +4,7 @@ import { EVENT_KEYS } from '../../constants/eventKeys';
 import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import type { Blocks } from '../../types/handler';
 
-export const getEmployeeInfoBlocks = (): Blocks => {
+export const employeeInfoBlocks = (): Blocks => {
 	return [
 		{
 			type: 'header',

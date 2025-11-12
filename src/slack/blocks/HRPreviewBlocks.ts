@@ -7,7 +7,7 @@ import type { Blocks } from '../../types/handler';
 
 type GetHrBlocks = ({ requestData }: { requestData: LeaveRequest }) => Blocks;
 
-export const getHrBlocks: GetHrBlocks = ({ requestData }) => {
+export const HRPreviewBlocks: GetHrBlocks = ({ requestData }) => {
 	const {
 		userId,
 		startDate,

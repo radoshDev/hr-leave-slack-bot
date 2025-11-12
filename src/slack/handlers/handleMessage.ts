@@ -1,6 +1,6 @@
 import { errorMessages } from '../../constants/errorMessages';
 import { parseRange } from '../../features/parseRange';
-import { getPreviewBlocks } from '../blocks/getPreviewBlocks';
+import { employeeRequestPreviewBlocks } from '../blocks/employeeRequestPreviewBlocks';
 import type { MessageMiddleware } from '../../types/handler';
 
 export const handleMessage: MessageMiddleware = async ({
@@ -18,7 +18,10 @@ export const handleMessage: MessageMiddleware = async ({
 		await client.chat.postMessage({
 			channel: event.channel,
 			text: 'Leave request preview',
-			blocks: getPreviewBlocks({ userId: event.user, ...parsedRange }),
+			blocks: employeeRequestPreviewBlocks({
+				userId: event.user,
+				...parsedRange,
+			}),
 		});
 	} catch (e) {
 		const errorMessage =

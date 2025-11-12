@@ -3,7 +3,7 @@ import { logger } from '../../config/logger';
 import { responseMessages } from '../../constants/responseMessages';
 import { prisma } from '../../db/prisma';
 import { api } from '../api';
-import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
+import { HRRequestDecisionBlocks } from '../blocks/HRRequestDecisionBlocks';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveReject: ActionMiddleware = async ({
@@ -37,7 +37,7 @@ export const handleLeaveReject: ActionMiddleware = async ({
 		await client.chat.update({
 			channel: body.channel.id,
 			ts: body.message.ts,
-			blocks: getLeaveDecisionBlocks({
+			blocks: HRRequestDecisionBlocks({
 				hrUserId,
 				requestData,
 				status: Status.REJECTED,

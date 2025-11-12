@@ -3,7 +3,7 @@ import { logger } from '../../config/logger';
 import { responseMessages } from '../../constants/responseMessages';
 import { prisma } from '../../db/prisma';
 import { api } from '../api';
-import { getLeaveDecisionBlocks } from '../blocks/getLeaveDecisionBlocks';
+import { HRRequestDecisionBlocks } from '../blocks/HRRequestDecisionBlocks';
 import type { ActionMiddleware } from '../../types/handler';
 
 export const handleLeaveApprove: ActionMiddleware = async ({
@@ -36,7 +36,7 @@ export const handleLeaveApprove: ActionMiddleware = async ({
 			channel: body.channel.id,
 			ts: body.message.ts,
 			text: 'Approved',
-			blocks: getLeaveDecisionBlocks({
+			blocks: HRRequestDecisionBlocks({
 				hrUserId,
 				requestData,
 				status: Status.APPROVED,

@@ -10,7 +10,7 @@ type GetPreviewBlocks = (
 	args: Omit<LeaveRequestInput, 'type'>,
 ) => (KnownBlock | Block)[];
 
-export const getPreviewBlocks: GetPreviewBlocks = ({
+export const employeeRequestPreviewBlocks: GetPreviewBlocks = ({
 	userId,
 	startDate,
 	endDate,

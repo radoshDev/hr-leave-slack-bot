@@ -1,7 +1,7 @@
 import { config } from '../../config/env';
 import { logger } from '../../config/logger';
-import { getEmployeeInfoBlocks } from '../blocks/getEmployeeInfoBlocks';
-import { getHRInfoBlocks } from '../blocks/getHRInfoBlocks';
+import { employeeInfoBlocks } from '../blocks/employeeInfoBlocks';
+import { HRInfoBlocks } from '../blocks/HRInfoBlocks';
 import type { CommandMiddleware } from '../../types/handler';
 
 export const handleInfoCommand: CommandMiddleware = async ({
@@ -18,7 +18,7 @@ export const handleInfoCommand: CommandMiddleware = async ({
 			await client.chat.postMessage({
 				channel: body.channel_id,
 				text: 'HR Info',
-				blocks: getHRInfoBlocks(),
+				blocks: HRInfoBlocks(),
 			});
 			return;
 		}
@@ -26,7 +26,7 @@ export const handleInfoCommand: CommandMiddleware = async ({
 		await client.chat.postMessage({
 			channel: body.user_id,
 			text: 'Your leave information',
-			blocks: getEmployeeInfoBlocks(),
+			blocks: employeeInfoBlocks(),
 		});
 	} catch (error) {
 		logger.error('Error handling /info command', { error });

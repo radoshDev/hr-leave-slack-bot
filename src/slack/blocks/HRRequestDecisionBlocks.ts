@@ -3,7 +3,7 @@ import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { Blocks, LeaveDecision } from '../../types/handler';
 
-const getLeaveDecisionBlocks = ({
+export const HRRequestDecisionBlocks = ({
 	hrUserId,
 	requestData,
 	status,
@@ -25,5 +25,3 @@ const getLeaveDecisionBlocks = ({
 		},
 	];
 };
-
-export { getLeaveDecisionBlocks };
