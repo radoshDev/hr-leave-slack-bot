@@ -2,9 +2,11 @@ import { LeaveType } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { errorMessages } from '../../constants/errorMessages';
 import { responseMessages } from '../../constants/responseMessages';
+import { createUserProfile } from '../../db/userProfile';
 import { getBookedLeaveDaysForYear } from '../../features/leave/getBookedLeaveDaysForYear';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import { api } from '../api';
+import { getUserFullName } from '../helpers/getUserFullName';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 
@@ -32,6 +34,10 @@ export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 			type: type || LeaveType.VACATION,
 		};
 
+		await createUserProfile({
+			userId,
+			fullNameProvider: () => getUserFullName({ client, userId }),
+		});
 		const requestResult = await saveLeaveRequest(requestData);
 
 		if (requestResult === false) {

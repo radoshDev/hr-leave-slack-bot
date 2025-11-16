@@ -8,6 +8,14 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+model UserProfile {
+  userId    String   @id
+  fullName  String
+  updatedAt DateTime @updatedAt
+
+  leaveRequests LeaveRequest[]
+}
+
 model LeaveRequest {
   id        Int       @id @default(autoincrement())
   userId    String
@@ -19,6 +27,8 @@ model LeaveRequest {
   status    Status    @default(PENDING)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  user UserProfile @relation(fields: [userId], references: [userId])
 }
 
 enum LeaveType {
