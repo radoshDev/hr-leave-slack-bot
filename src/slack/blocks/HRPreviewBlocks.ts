@@ -17,7 +17,6 @@ export const HRPreviewBlocks: GetHrBlocks = ({ requestData }) => {
 		id: requestId,
 	} = requestData;
 	return [
-		{ type: 'header', text: { type: 'plain_text', text: 'Leave request' } },
 		{ type: 'divider' },
 		{
 			type: 'section',

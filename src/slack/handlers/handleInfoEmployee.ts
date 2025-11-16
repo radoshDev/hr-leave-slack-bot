@@ -16,13 +16,12 @@ export const handleInfoEmployee: ActionMiddleware = async ({
 	try {
 		await ack();
 		const userId = body.user.id;
-		const tsMessage = body.message?.ts;
 		const channelId = body.channel?.id;
 		const leaveType = action.value as LeaveType | undefined;
 		const year = new Date().getFullYear();
 
 		if (!leaveType) throw new Error('Leave type not provided in action value');
-		if (!tsMessage || !channelId)
+		if (!channelId)
 			throw new Error(
 				'Message timestamp or channel ID not found in action body',
 			);
@@ -52,9 +51,8 @@ export const handleInfoEmployee: ActionMiddleware = async ({
 						)
 						.join('\n');
 
-		await client.chat.update({
+		await client.chat.postMessage({
 			channel: channelId,
-			ts: tsMessage,
 			text: `${leaveTypesText[leaveType]} Info`,
 			blocks: [
 				{

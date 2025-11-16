@@ -16,6 +16,7 @@ export const saveLeaveRequest: SaveLeaveRequest = async (input) => {
 		where: {
 			userId,
 			status: { in: [Status.PENDING, Status.APPROVED] },
+			type,
 			OR: [
 				{
 					startDate: { lte: endDate },

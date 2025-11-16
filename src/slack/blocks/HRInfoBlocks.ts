@@ -2,6 +2,7 @@ import { LeaveType } from '@prisma/client';
 import { EMOJI } from '../../constants/emoji';
 import { EVENT_KEYS } from '../../constants/eventKeys';
 import { leaveTypesText } from '../../constants/leaveTypeMessages';
+import { HRInfoLeaveButtons } from './elements/HRInfoLeaveButtons';
 import type { Blocks } from '../../types/handler';
 
 export const HRInfoBlocks = (): Blocks => {
@@ -37,7 +38,18 @@ export const HRInfoBlocks = (): Blocks => {
 			type: 'section',
 			text: {
 				type: 'mrkdwn',
-				text: 'Select an option to view leave requests:',
+				text: '*Manage leave requests and reports:*',
+			},
+		},
+		{
+			type: 'actions',
+			elements: HRInfoLeaveButtons({ leaveType: LeaveType.VACATION }),
+		},
+		{
+			type: 'section',
+			text: {
+				type: 'mrkdwn',
+				text: '*General Reports:*',
 			},
 		},
 		{
@@ -45,23 +57,19 @@ export const HRInfoBlocks = (): Blocks => {
 			elements: [
 				{
 					type: 'button',
-					text: { type: 'plain_text', text: '📋 All Requests' },
-					action_id: 'hr_all_requests',
+					text: {
+						type: 'plain_text',
+						text: `Report for this year`,
+					},
+					action_id: 'info_hr_report_this_year',
 				},
 				{
 					type: 'button',
-					text: { type: 'plain_text', text: '🕓 Pending Approvals' },
-					action_id: 'hr_pending_requests',
-				},
-				{
-					type: 'button',
-					text: { type: 'plain_text', text: '✅ Approved' },
-					action_id: 'hr_approved_requests',
-				},
-				{
-					type: 'button',
-					text: { type: 'plain_text', text: '❌ Rejected' },
-					action_id: 'hr_rejected_requests',
+					text: {
+						type: 'plain_text',
+						text: `Report for last year`,
+					},
+					action_id: 'info_hr_report_last_year',
 				},
 			],
 		},

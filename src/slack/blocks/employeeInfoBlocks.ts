@@ -23,34 +23,18 @@ export const employeeInfoBlocks = (): Blocks => {
 		{
 			type: 'actions',
 			elements: [
-				{
-					type: 'button',
-					text: {
-						type: 'plain_text',
-						text: `${EMOJI.VACATION} ${leaveTypesText.VACATION} Requests`,
-					},
-					action_id: EVENT_KEYS.INFO_EMPLOYEE_VACATION,
-					value: LeaveType.VACATION,
+				LeaveType.VACATION,
+				LeaveType.SICK_LEAVE,
+				LeaveType.UNPAID,
+			].map((leaveType) => ({
+				type: 'button',
+				text: {
+					type: 'plain_text',
+					text: `${EMOJI[leaveType]} ${leaveTypesText[leaveType]} Requests`,
 				},
-				{
-					type: 'button',
-					text: {
-						type: 'plain_text',
-						text: `${EMOJI.SICK_LEAVE} ${leaveTypesText.SICK_LEAVE} Requests`,
-					},
-					action_id: EVENT_KEYS.INFO_EMPLOYEE_SICK,
-					value: LeaveType.SICK_LEAVE,
-				},
-				{
-					type: 'button',
-					text: {
-						type: 'plain_text',
-						text: `${EMOJI.UNPAID} ${leaveTypesText.UNPAID} Requests`,
-					},
-					action_id: EVENT_KEYS.INFO_EMPLOYEE_UNPAID,
-					value: LeaveType.UNPAID,
-				},
-			],
+				action_id: `${EVENT_KEYS.INFO_EMPLOYEE_REQUESTS}_${leaveType}`,
+				value: LeaveType[leaveType],
+			})),
 		},
 	];
 };

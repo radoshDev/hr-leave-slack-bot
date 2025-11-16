@@ -19,7 +19,10 @@ export const api = {
 		return app.client.chat.postMessage({
 			channel: config.hrChannelId,
 			text: 'New leave request submitted',
-			blocks: HRPreviewBlocks({ requestData }),
+			blocks: [
+				{ type: 'header', text: { type: 'plain_text', text: 'Leave request' } },
+				...HRPreviewBlocks({ requestData }),
+			],
 		});
 	},
 	postDM: async ({ userId, text, blocks }: PostDMArgs) => {

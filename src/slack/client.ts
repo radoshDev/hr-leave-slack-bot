@@ -2,14 +2,18 @@ import bolt from '@slack/bolt';
 import { config } from '../config/env';
 import { logger } from '../config/logger';
 import { EVENT_KEYS } from '../constants/eventKeys';
-import { handleInfoCommand } from './handlers/handleInfoCommand';
-import { handleInfoEmployee } from './handlers/handleInfoEmployee';
-import { handleHRLeaveApprove } from './handlers/handleHRLeaveApprove';
-import { handleHRLeaveReject } from './handlers/handleHRLeaveReject';
 import { handleEmployeeLeaveCancel } from './handlers/handleEmployeeLeaveCancel';
 import { handleEmployeeLeaveSend } from './handlers/handleEmployeeLeaveSend';
 import { handleEmployeeMessage } from './handlers/handleEmployeeMessage';
 import { handleEmployeeSelectLeaveType } from './handlers/handleEmployeeSelectLeaveType';
+import { handleHRLeaveApprove } from './handlers/handleHRLeaveApprove';
+import { handleHRLeaveReject } from './handlers/handleHRLeaveReject';
+import { handleInfoCommand } from './handlers/handleInfoCommand';
+import { handleInfoEmployee } from './handlers/handleInfoEmployee';
+import { handleInfoHRPendingRequests } from './handlers/handleInfoHRPendingRequests';
+import { handleInfoHRReportRequests } from './handlers/handleInfoHRReportRequests';
+import { handleInfoHRSelectLeaveType } from './handlers/handleInfoHRSelectLeaveType';
+import { handleInfoHRUpcomingRequests } from './handlers/handleInfoHRUpcomingRequests';
 
 const { App } = bolt;
 
@@ -33,11 +37,26 @@ export async function start() {
 
 		app.command('/info', handleInfoCommand);
 
-		app.action(EVENT_KEYS.INFO_EMPLOYEE_VACATION, handleInfoEmployee);
-		app.action(EVENT_KEYS.INFO_EMPLOYEE_SICK, handleInfoEmployee);
-		app.action(EVENT_KEYS.INFO_EMPLOYEE_UNPAID, handleInfoEmployee);
+		app.action(
+			new RegExp(`^${EVENT_KEYS.INFO_EMPLOYEE_REQUESTS}`, 'g'),
+			handleInfoEmployee,
+		);
 
-		app.action(EVENT_KEYS.INFO_HR_SELECT_LEAVE_TYPE);
+		app.action(
+			EVENT_KEYS.INFO_HR_SELECT_LEAVE_TYPE,
+			handleInfoHRSelectLeaveType,
+		);
+
+		app.action(
+			EVENT_KEYS.INFO_HR_UPCOMING_REQUESTS,
+			handleInfoHRUpcomingRequests,
+		);
+		app.action(
+			EVENT_KEYS.INFO_HR_PENDING_REQUESTS,
+			handleInfoHRPendingRequests,
+		);
+
+		app.action(EVENT_KEYS.INFO_HR_REPORT_REQUESTS, handleInfoHRReportRequests);
 
 		await app.start();
 
