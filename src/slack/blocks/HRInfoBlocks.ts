@@ -61,7 +61,7 @@ export const HRInfoBlocks = (): Blocks => {
 						type: 'plain_text',
 						text: `Report for this year`,
 					},
-					action_id: 'info_hr_report_this_year',
+					action_id: EVENT_KEYS.INFO_HR_REPORT_GENERAL_CURRENT_YEAR,
 				},
 				{
 					type: 'button',
@@ -69,7 +69,7 @@ export const HRInfoBlocks = (): Blocks => {
 						type: 'plain_text',
 						text: `Report for last year`,
 					},
-					action_id: 'info_hr_report_last_year',
+					action_id: EVENT_KEYS.INFO_HR_REPORT_GENERAL_LAST_YEAR,
 				},
 			],
 		},
