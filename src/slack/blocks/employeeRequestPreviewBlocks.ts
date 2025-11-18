@@ -53,15 +53,13 @@ export const employeeRequestPreviewBlocks: GetPreviewBlocks = ({
 				type: 'plain_text',
 				text: `${EMOJI.VACATION} ${leaveTypesText.VACATION}`,
 			},
-			options: [LeaveType.VACATION, LeaveType.SICK_LEAVE, LeaveType.UNPAID].map(
-				(leaveType) => ({
-					text: {
-						type: 'plain_text',
-						text: `${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
-					},
-					value: LeaveType[leaveType],
-				}),
-			),
+			options: [LeaveType.VACATION, LeaveType.SICK_LEAVE].map((leaveType) => ({
+				text: {
+					type: 'plain_text',
+					text: `${EMOJI[leaveType]} ${leaveTypesText[leaveType]}`,
+				},
+				value: LeaveType[leaveType],
+			})),
 		},
 	},
 	{ type: 'divider' },

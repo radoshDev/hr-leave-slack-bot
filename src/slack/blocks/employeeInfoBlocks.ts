@@ -22,11 +22,7 @@ export const employeeInfoBlocks = (): Blocks => {
 		},
 		{
 			type: 'actions',
-			elements: [
-				LeaveType.VACATION,
-				LeaveType.SICK_LEAVE,
-				LeaveType.UNPAID,
-			].map((leaveType) => ({
+			elements: [LeaveType.VACATION, LeaveType.SICK_LEAVE].map((leaveType) => ({
 				type: 'button',
 				text: {
 					type: 'plain_text',

@@ -34,7 +34,6 @@ model LeaveRequest {
 enum LeaveType {
   VACATION
   SICK_LEAVE
-  UNPAID
 }
 
 enum Status {

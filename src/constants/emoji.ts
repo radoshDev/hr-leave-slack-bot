@@ -7,7 +7,6 @@ type Key = LeaveType | Status | CustomKey;
 export const EMOJI: Record<Key, string> = {
 	VACATION: '🌴',
 	SICK_LEAVE: '🤒',
-	UNPAID: '💸',
 	APPROVED: '✅',
 	REJECTED: '❌',
 	PENDING: '⏳',
