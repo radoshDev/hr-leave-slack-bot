@@ -1,6 +1,8 @@
-import type { LeaveTypeWithStatus } from '../types/leaveRequest';
+import type { LeaveType, Status } from '@prisma/client';
 
-type Key = LeaveTypeWithStatus | 'employee' | 'type' | 'period' | 'days';
+type CustomKey = 'employee' | 'type' | 'period' | 'days' | 'stop';
+
+type Key = LeaveType | Status | CustomKey;
 
 export const EMOJI: Record<Key, string> = {
 	VACATION: '🌴',
@@ -13,4 +15,5 @@ export const EMOJI: Record<Key, string> = {
 	type: '🗓',
 	period: '📅',
 	days: '⏳',
+	stop: '🛑',
 };

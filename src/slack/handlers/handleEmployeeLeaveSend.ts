@@ -5,6 +5,7 @@ import { responseMessages } from '../../constants/responseMessages';
 import { createUserProfile } from '../../db/userProfile';
 import { getBookedLeaveDaysForYear } from '../../features/leave/getBookedLeaveDaysForYear';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
+import { formatDate } from '../../utils/formatDate';
 import { api } from '../api';
 import { getUserFullName } from '../helpers/getUserFullName';
 import type { ActionMiddleware } from '../../types/handler';
@@ -44,7 +45,11 @@ export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 			await client.chat.update({
 				channel: body.channel.id,
 				ts: body.message.ts,
-				text: errorMessages.overlappingLeaveRequest,
+				text: errorMessages.overlappingLeaveRequest({
+					startDate: formatDate(new Date(startDate), 'dd.MM.yyyy'),
+					endDate: formatDate(new Date(endDate), 'dd.MM.yyyy'),
+					leaveType: requestData.type,
+				}),
 			});
 			return;
 		}

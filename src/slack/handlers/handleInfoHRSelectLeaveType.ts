@@ -22,7 +22,7 @@ export const handleInfoHRSelectLeaveType: SelectMiddleware = async ({
 
 		const messageBlocks: KnownBlock[] = body.message.blocks;
 		const newBlocks = messageBlocks.map((block) => {
-			if (block.type === 'actions') {
+			if (block.type === 'actions' && block.block_id === 'hr_leave_buttons') {
 				return {
 					...block,
 					elements: HRInfoLeaveButtons({

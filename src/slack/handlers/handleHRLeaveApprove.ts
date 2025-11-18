@@ -26,7 +26,7 @@ export const handleHRLeaveApprove: ActionMiddleware = async ({
 
 		await api.postDM({
 			userId: requestData.userId,
-			text: responseMessages.decision({
+			text: responseMessages.decisionEmployee({
 				requestData,
 				hrUserId,
 				status: Status.APPROVED,

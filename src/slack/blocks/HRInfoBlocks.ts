@@ -43,6 +43,7 @@ export const HRInfoBlocks = (): Blocks => {
 		},
 		{
 			type: 'actions',
+			block_id: 'hr_leave_buttons',
 			elements: HRInfoLeaveButtons({ leaveType: LeaveType.VACATION }),
 		},
 		{
