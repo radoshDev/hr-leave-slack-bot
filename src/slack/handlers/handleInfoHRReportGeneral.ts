@@ -3,23 +3,24 @@ import { prisma } from '../../db/prisma';
 import { getReportCSV } from '../helpers/getReportCSV';
 import type { ActionMiddleware } from '../../types/handler';
 
-export const handleInfoHRReportGeneralCurrentYear: ActionMiddleware = async ({
+export const handleInfoHRReportGeneral: ActionMiddleware = async ({
 	ack,
 	body,
 	client,
+	action,
 }) => {
 	try {
 		await ack();
 
 		const channelId = body.channel?.id;
+		const year = Number(action.value);
 
 		if (!channelId) throw new Error('Channel ID missing');
-
-		const year = new Date().getFullYear();
+		if (!year) throw new Error('Year not provided');
 
 		const requests = await prisma.leaveRequest.findMany({
-			where: { year },
-			orderBy: { startDate: 'asc' },
+			where: { year, status: 'APPROVED' },
+			orderBy: [{ type: 'asc' }, { startDate: 'asc' }],
 			include: { user: true },
 		});
 

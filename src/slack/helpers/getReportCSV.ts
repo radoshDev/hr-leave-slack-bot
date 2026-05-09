@@ -1,3 +1,4 @@
+import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { LeaveRequest, UserProfile } from '@prisma/client';
 
@@ -11,8 +12,8 @@ export const getReportCSV = (requests: RequestWithUser[]): string => {
 			formatDate(r.startDate, 'dd.MM.yyyy'),
 			formatDate(r.endDate, 'dd.MM.yyyy'),
 			String(r.days),
-			r.type,
-			r.status,
+			leaveTypesText[r.type],
+			leaveTypesText[r.status],
 		]),
 	];
 

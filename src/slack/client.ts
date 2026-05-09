@@ -11,8 +11,7 @@ import { handleHRLeaveReject } from './handlers/handleHRLeaveReject';
 import { handleInfoCommand } from './handlers/handleInfoCommand';
 import { handleInfoEmployee } from './handlers/handleInfoEmployee';
 import { handleInfoHRPendingRequests } from './handlers/handleInfoHRPendingRequests';
-import { handleInfoHRReportGeneralCurrentYear } from './handlers/handleInfoHRReportGeneralCurrentYear';
-import { handleInfoHRReportGeneralLastYear } from './handlers/handleInfoHRReportGeneralLastYear';
+import { handleInfoHRReportGeneral } from './handlers/handleInfoHRReportGeneral';
 import { handleInfoHRReportRequests } from './handlers/handleInfoHRReportRequests';
 import { handleInfoHRSelectLeaveType } from './handlers/handleInfoHRSelectLeaveType';
 import { handleInfoHRUpcomingRequests } from './handlers/handleInfoHRUpcomingRequests';
@@ -61,13 +60,8 @@ export async function start() {
 		app.action(EVENT_KEYS.INFO_HR_REPORT_REQUESTS, handleInfoHRReportRequests);
 
 		app.action(
-			EVENT_KEYS.INFO_HR_REPORT_GENERAL_CURRENT_YEAR,
-			handleInfoHRReportGeneralCurrentYear,
-		);
-
-		app.action(
-			EVENT_KEYS.INFO_HR_REPORT_GENERAL_LAST_YEAR,
-			handleInfoHRReportGeneralLastYear,
+			new RegExp(`^${EVENT_KEYS.INFO_HR_REPORT_GENERAL}`, 'g'),
+			handleInfoHRReportGeneral,
 		);
 
 		await app.start();

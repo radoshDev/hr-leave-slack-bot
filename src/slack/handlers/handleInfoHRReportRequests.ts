@@ -24,7 +24,7 @@ export const handleInfoHRReportRequests: ActionMiddleware = async ({
 		const year = new Date().getFullYear();
 
 		const requests = await prisma.leaveRequest.findMany({
-			where: { year, type: leaveType },
+			where: { year, type: leaveType, status: 'APPROVED' },
 			orderBy: { startDate: 'asc' },
 			include: { user: true },
 		});

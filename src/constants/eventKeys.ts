@@ -9,6 +9,5 @@ export const EVENT_KEYS = {
 	INFO_HR_UPCOMING_REQUESTS: 'info_hr_upcoming_requests',
 	INFO_HR_PENDING_REQUESTS: 'info_hr_pending_requests',
 	INFO_HR_REPORT_REQUESTS: 'info_hr_report_requests',
-	INFO_HR_REPORT_GENERAL_CURRENT_YEAR: 'info_hr_report_general_current_year',
-	INFO_HR_REPORT_GENERAL_LAST_YEAR: 'info_hr_report_general_last_year',
+	INFO_HR_REPORT_GENERAL: 'info_hr_report_general',
 };

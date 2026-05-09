@@ -6,6 +6,9 @@ import { HRInfoLeaveButtons } from './elements/HRInfoLeaveButtons';
 import type { Blocks } from '../../types/handler';
 
 export const HRInfoBlocks = (): Blocks => {
+	const currentYear = new Date().getFullYear();
+	const lastYear = currentYear - 1;
+
 	return [
 		{
 			type: 'header',
@@ -60,7 +63,8 @@ export const HRInfoBlocks = (): Blocks => {
 						type: 'plain_text',
 						text: `Report for this year`,
 					},
-					action_id: EVENT_KEYS.INFO_HR_REPORT_GENERAL_CURRENT_YEAR,
+					action_id: `${EVENT_KEYS.INFO_HR_REPORT_GENERAL}_${currentYear}`,
+					value: currentYear.toString(),
 				},
 				{
 					type: 'button',
@@ -68,7 +72,8 @@ export const HRInfoBlocks = (): Blocks => {
 						type: 'plain_text',
 						text: `Report for last year`,
 					},
-					action_id: EVENT_KEYS.INFO_HR_REPORT_GENERAL_LAST_YEAR,
+					action_id: `${EVENT_KEYS.INFO_HR_REPORT_GENERAL}_${lastYear}`,
+					value: lastYear.toString(),
 				},
 			],
 		},
