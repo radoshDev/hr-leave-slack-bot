@@ -2,6 +2,8 @@ import { Status } from '@prisma/client';
 import { logger } from '../../config/logger';
 import { responseMessages } from '../../constants/responseMessages';
 import { prisma } from '../../db/prisma';
+import { sheetsApi } from '../../db/sheets';
+import { formatDate } from '../../utils/formatDate';
 import { api } from '../api';
 import { HRRequestDecisionBlocks } from '../blocks/HRRequestDecisionBlocks';
 import type { ActionMiddleware } from '../../types/handler';
@@ -22,6 +24,17 @@ export const handleHRLeaveApprove: ActionMiddleware = async ({
 		const requestData = await prisma.leaveRequest.update({
 			where: { id: requestId },
 			data: { status: Status.APPROVED },
+			include: { user: true },
+		});
+
+		await sheetsApi.append({
+			userId: requestData.userId,
+			fullName: requestData.user.fullName,
+			type: requestData.type,
+			startDate: formatDate(requestData.startDate, 'dd.MM.yyyy'),
+			endDate: formatDate(requestData.endDate, 'dd.MM.yyyy'),
+			year: requestData.year,
+			days: requestData.days,
 		});
 
 		await api.postDM({
