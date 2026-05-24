@@ -5,9 +5,7 @@ import { responseMessages } from '../../constants/responseMessages';
 import { createUserProfile } from '../../db/userProfile';
 import { getBookedLeaveDaysForYear } from '../../features/leave/getBookedLeaveDaysForYear';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
-import { formatDate } from '../../utils/formatDate';
 import { api } from '../api';
-import { getUserFullName } from '../helpers/getUserFullName';
 import type { ActionMiddleware } from '../../types/handler';
 import type { LeaveRequestInput } from '../../types/leaveRequest';
 
@@ -35,24 +33,9 @@ export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 			type: type || LeaveType.VACATION,
 		};
 
-		await createUserProfile({
-			userId,
-			fullNameProvider: () => getUserFullName({ client, userId }),
-		});
-		const requestResult = await saveLeaveRequest(requestData);
+		await createUserProfile({ userId, client });
 
-		if (requestResult === false) {
-			await client.chat.update({
-				channel: body.channel.id,
-				ts: body.message.ts,
-				text: errorMessages.overlappingLeaveRequest({
-					startDate: formatDate(new Date(startDate), 'dd.MM.yyyy'),
-					endDate: formatDate(new Date(endDate), 'dd.MM.yyyy'),
-					leaveType: requestData.type,
-				}),
-			});
-			return;
-		}
+		const requestResult = await saveLeaveRequest(requestData);
 
 		await api.postToHrChannel({
 			requestData: requestResult,
@@ -77,5 +60,15 @@ export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 		});
 	} catch (error) {
 		logger.error('Error in handleVacationSend:', error);
+		const message =
+			error instanceof Error ? error.message : errorMessages.systemError;
+		if (!body.channel?.id || !body.message?.ts) {
+			return;
+		}
+		await client.chat.update({
+			channel: body.channel.id,
+			ts: body.message.ts,
+			text: message,
+		});
 	}
 };
