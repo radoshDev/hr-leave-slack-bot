@@ -4,7 +4,7 @@ const setup = async () => {
 	const makeYearMock = vi.fn();
 	vi.doMock('./makeYear', () => ({ makeYear: makeYearMock }));
 	const mod = await import('./parseDate');
-	const { makeYear } = await import('./makeYear');
+	const { getCurrentYear: makeYear } = await import('./getCurrentYear');
 	return {
 		parseDate: mod.parseDate,
 		makeYearMock: makeYear as unknown as Mock,

@@ -1,4 +1,9 @@
-import { differenceInCalendarDays, isBefore, startOfToday } from 'date-fns';
+import {
+	addDays,
+	differenceInCalendarDays,
+	isBefore,
+	startOfToday,
+} from 'date-fns';
 import { errorMessages } from '../constants/errorMessages';
 import { formatDate } from '../utils/formatDate';
 import { makeDate } from './date/makeDate';
@@ -27,17 +32,22 @@ export const parseRange: ParseRange = (input) => {
 	if (!startDate || !endDate) throw new Error(errorMessages.invalidDate);
 
 	const today = startOfToday();
-	if (isBefore(startDate, today) || isBefore(endDate, today))
-		throw new Error(errorMessages.pastDate);
+
+	if (isBefore(endDate, today)) throw new Error(errorMessages.pastDate);
 
 	if (startDate.getTime() > endDate.getTime())
 		throw new Error(errorMessages.invalidRange);
 
-	const days = differenceInCalendarDays(endDate, startDate) + 1;
+	const isFriday = endDate.getDay() === 5;
+	const isMoreThanOneDay = startDate.getTime() !== endDate.getTime();
+	const adjustedEndDate =
+		isFriday && isMoreThanOneDay ? addDays(endDate, 2) : endDate;
+
+	const days = differenceInCalendarDays(adjustedEndDate, startDate) + 1;
 
 	return {
 		startDate: `${formatDate(startDate, 'yyyy-MM-dd')}T00:00:00Z`,
-		endDate: `${formatDate(endDate, 'yyyy-MM-dd')}T00:00:00Z`,
+		endDate: `${formatDate(adjustedEndDate, 'yyyy-MM-dd')}T00:00:00Z`,
 		days,
 		year: startDate.getFullYear(),
 	};

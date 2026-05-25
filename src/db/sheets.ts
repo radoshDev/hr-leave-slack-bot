@@ -32,7 +32,6 @@ export const sheetsApi = {
 		type: leaveType,
 		startDate,
 		endDate,
-		year,
 		days,
 	}: LeaveRequestSheetData) => {
 		try {
@@ -42,7 +41,7 @@ export const sheetsApi = {
 				range: getSheetRange(leaveType),
 				requestBody: {
 					majorDimension: 'ROWS',
-					values: [[userId, fullName, `${startDate} - ${endDate}`, year, days]],
+					values: [[userId, fullName, startDate, endDate, days]],
 				},
 			});
 		} catch (error) {

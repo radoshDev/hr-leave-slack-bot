@@ -1,4 +1,4 @@
-import { makeYear } from './makeYear';
+import { getCurrentYear } from './getCurrentYear';
 import type { DateObject } from '../../types/date';
 
 const DATE_RE = /^\s*(\d{1,2})\.(\d{1,2})(?:\.(\d{4}))?\s*$/;
@@ -16,7 +16,7 @@ export function parseDate(input: string): DateObject | null {
 
 	if (month < 1 || month > 12) return null;
 
-	const year = match[3] ? Number(match[3]) : makeYear({ day, month });
+	const year = match[3] ? Number(match[3]) : getCurrentYear();
 
 	if (!year) return null;
 

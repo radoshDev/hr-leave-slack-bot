@@ -38,7 +38,9 @@ const importSut = async ({
 		}),
 	}));
 
-	const mod = (await import('./makeYear')) as typeof import('./makeYear');
+	const mod = (await import(
+		'./getCurrentYear'
+	)) as typeof import('./getCurrentYear');
 	return mod;
 };
 
@@ -57,7 +59,9 @@ describe('makeYear', () => {
 	it('returns currentYear when candidate date is after today', async () => {
 		const testFutureDate = { day: testNowDay + 1, month: testNowMonth }; // Sep 19
 		const testDateStamp = `${testNowYear}-0${testFutureDate.month}-${testFutureDate.day}T00:00:00.000Z`; // Sep 19, 2025
-		const { makeYear } = await importSut({ dateStamp: testDateStamp });
+		const { getCurrentYear: makeYear } = await importSut({
+			dateStamp: testDateStamp,
+		});
 		const { makeDate } = await import('./makeDate');
 
 		const result = makeYear(testFutureDate);
@@ -72,7 +76,7 @@ describe('makeYear', () => {
 	});
 
 	it('returns currentYear when candidate date is exactly today (>= startOfDay)', async () => {
-		const { makeYear } = await importSut({
+		const { getCurrentYear: makeYear } = await importSut({
 			dateStamp: '2025-09-18T00:00:00.000Z',
 		});
 		const result = makeYear({ day: 18, month: 9 }); // Sep 18 vs Sep 18 → same day
@@ -82,7 +86,7 @@ describe('makeYear', () => {
 	it('returns next year when candidate date already passed this year', async () => {
 		const testPastDate = { day: testNowDay - 1, month: testNowMonth }; // Sep 17
 		const testDateStamp = `${testNowYear}-0${testPastDate.month}-${testPastDate.day}T00:00:00.000Z`;
-		const { makeYear } = await importSut({
+		const { getCurrentYear: makeYear } = await importSut({
 			dateStamp: testDateStamp,
 		});
 		const result = makeYear(testPastDate); // Sep 17 vs Sep 18 → past
@@ -90,7 +94,7 @@ describe('makeYear', () => {
 	});
 
 	it('returns null when makeDate returns null (invalid day/month)', async () => {
-		const { makeYear } = await importSut({
+		const { getCurrentYear: makeYear } = await importSut({
 			dateStamp: testNowTimestamp,
 			isInvalidDate: true,
 		});
