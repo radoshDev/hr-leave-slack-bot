@@ -4,8 +4,11 @@ import { app } from './client';
 import type { LeaveRequest } from '@prisma/client';
 import type { Blocks } from '../types/handler';
 
+import type { OverlappingEmployee } from '../features/leave/getOverlappingEmployees';
+
 type PostToChannelArgs = {
 	requestData: LeaveRequest;
+	overlappingEmployees: OverlappingEmployee[];
 };
 
 type PostDMArgs = {
@@ -15,13 +18,13 @@ type PostDMArgs = {
 };
 
 export const api = {
-	postToHrChannel: async ({ requestData }: PostToChannelArgs) => {
+	postToHrChannel: async ({ requestData, overlappingEmployees }: PostToChannelArgs) => {
 		return app.client.chat.postMessage({
 			channel: config.hrChannelId,
 			text: 'New leave request submitted',
 			blocks: [
 				{ type: 'header', text: { type: 'plain_text', text: 'Leave request' } },
-				...HRPreviewBlocks({ requestData }),
+				...HRPreviewBlocks({ requestData, overlappingEmployees }),
 			],
 		});
 	},

@@ -44,7 +44,7 @@ export const handleInfoHRPendingRequests: ActionMiddleware = async ({
 			});
 		} else {
 			pendingRequests.forEach((request) => {
-				blocks.push(...HRPreviewBlocks({ requestData: request }));
+				blocks.push(...HRPreviewBlocks({ requestData: request, overlappingEmployees: [] }));
 			});
 		}
 

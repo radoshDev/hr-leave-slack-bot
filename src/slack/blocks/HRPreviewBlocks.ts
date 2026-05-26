@@ -4,10 +4,17 @@ import { leaveTypesText } from '../../constants/leaveTypeMessages';
 import { formatDate } from '../../utils/formatDate';
 import type { LeaveRequest } from '@prisma/client';
 import type { Blocks } from '../../types/handler';
+import type { OverlappingEmployee } from '../../features/leave/getOverlappingEmployees';
 
-type GetHrBlocks = ({ requestData }: { requestData: LeaveRequest }) => Blocks;
+type GetHrBlocks = ({
+	requestData,
+	overlappingEmployees,
+}: {
+	requestData: LeaveRequest;
+	overlappingEmployees: OverlappingEmployee[];
+}) => Blocks;
 
-export const HRPreviewBlocks: GetHrBlocks = ({ requestData }) => {
+export const HRPreviewBlocks: GetHrBlocks = ({ requestData, overlappingEmployees }) => {
 	const {
 		userId,
 		startDate,
@@ -52,6 +59,25 @@ export const HRPreviewBlocks: GetHrBlocks = ({ requestData }) => {
 				},
 			],
 		},
+		...(overlappingEmployees.length > 0
+			? [
+					{
+						type: 'section',
+						fields: [
+							{ type: 'mrkdwn', text: '⚠️ *Overlapping with*' },
+							{
+								type: 'mrkdwn',
+								text: overlappingEmployees
+									.map(
+										({ userId: uid, startDate: s, endDate: e }) =>
+											`<@${uid}> ${formatDate(new Date(s), 'dd.MM.yyyy')} — ${formatDate(new Date(e), 'dd.MM.yyyy')}`,
+									)
+									.join('\n'),
+							},
+						],
+					},
+				]
+			: []),
 		{ type: 'divider' },
 		{
 			type: 'actions',

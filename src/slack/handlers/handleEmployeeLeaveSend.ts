@@ -4,6 +4,7 @@ import { errorMessages } from '../../constants/errorMessages';
 import { responseMessages } from '../../constants/responseMessages';
 import { createUserProfile } from '../../db/userProfile';
 import { getBookedLeaveDaysForYear } from '../../features/leave/getBookedLeaveDaysForYear';
+import { getOverlappingEmployees } from '../../features/leave/getOverlappingEmployees';
 import { saveLeaveRequest } from '../../features/leave/saveLeaveRequest';
 import { api } from '../api';
 import type { ActionMiddleware } from '../../types/handler';
@@ -37,8 +38,15 @@ export const handleEmployeeLeaveSend: ActionMiddleware = async ({
 
 		const requestResult = await saveLeaveRequest(requestData);
 
+		const overlappingEmployees = await getOverlappingEmployees({
+			userId,
+			startDate: new Date(startDate),
+			endDate: new Date(endDate),
+		});
+
 		await api.postToHrChannel({
 			requestData: requestResult,
+			overlappingEmployees,
 		});
 
 		const bookedDays = await getBookedLeaveDaysForYear({
